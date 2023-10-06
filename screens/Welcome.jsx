@@ -10,7 +10,7 @@ export default function Welcome({ navigation }) {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("Cards");
+      navigation.navigate("Profile");
     }, 1000);
   }, []);
 
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 
   text: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: "400",
+    color: "#1B1B1F",
   },
 });

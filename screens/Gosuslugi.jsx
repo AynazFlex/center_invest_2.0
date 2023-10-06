@@ -55,8 +55,8 @@ export default function Gosuslugi({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={[styles.title__1_step, styles.title__all]}>Гос</Text>
-        <Text style={[styles.title__2_step, styles.title__all]}>услуги</Text>
+        <Text style={[styles.title__1_step, styles.title__all]}>ГОС</Text>
+        <Text style={[styles.title__2_step, styles.title__all]}>УСЛУГИ</Text>
       </View>
 
       <View style={inputStyles(log_valid)}>
@@ -163,7 +163,8 @@ const styles = StyleSheet.create({
   },
 
   font: {
-    fontSize: 16,
+    fontSize: 14,
+    fontWeight: '500'
   },
 
   wrapper__label: {
