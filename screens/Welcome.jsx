@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View, StyleSheet, StatusBar, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import useGoHome from "./custom_hooks/useGoHome";
 import ScreenWrapper from "./components/ScreenWrapper";
 import IconWrapper from "./components/IconWrapper";
@@ -42,7 +42,6 @@ export default function Welcome({ navigation }) {
           </Svg>
         </IconWrapper>
         <Text style={styles.text}>Добро пожаловать!</Text>
-        <StatusBar style="auto" />
       </View>
     </ScreenWrapper>
   );

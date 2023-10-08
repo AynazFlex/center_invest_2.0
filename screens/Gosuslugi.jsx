@@ -8,14 +8,18 @@ import {
   TextInput,
   StatusBar,
   ActivityIndicator,
+  Alert,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth } from "../store/dataReducer";
 
 export default function Gosuslugi({ navigation }) {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [log_valid, setLog_valid] = useState(true);
   const [pass_valid, setPass_valid] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const { error_msg, isPending, value } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   const log_val = useRef(null);
   const pass_val = useRef(null);
@@ -25,9 +29,20 @@ export default function Gosuslugi({ navigation }) {
       return () => {
         setLogin("");
         setPassword("");
-        setLoading(false);
       };
     }, [])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      value && navigation.navigate("Welcome");
+    }, [value])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      error_msg && Alert.alert("Error", error_msg);
+    }, [error_msg])
   );
 
   const handleSubmit = () => {
@@ -39,12 +54,17 @@ export default function Gosuslugi({ navigation }) {
       pass_val.current.focus();
       return;
     }
-    setLoading(true);
     log_val.current.blur();
     pass_val.current.blur();
-    setTimeout(() => {
-      navigation.navigate("Welcome");
-    }, 2000);
+    dispatch(
+      setAuth({
+        username: login,
+        password,
+      })
+    );
+    // setTimeout(() => {
+    //   navigation.navigate("Welcome");
+    // }, 2000);
   };
 
   const inputStyles = (flag) =>
@@ -89,14 +109,14 @@ export default function Gosuslugi({ navigation }) {
       </View>
       <Pressable
         onPress={handleSubmit}
-        disabled={loading}
+        disabled={isPending}
         style={[
           styles.wrapper__all,
           styles.enter,
-          { opacity: loading ? 0.5 : 1 },
+          { opacity: isPending ? 0.5 : 1 },
         ]}
       >
-        {loading ? (
+        {isPending ? (
           <ActivityIndicator size={16} color="white" />
         ) : (
           <Text style={[styles.enter__text, styles.font]}>Войти</Text>
@@ -164,7 +184,7 @@ const styles = StyleSheet.create({
 
   font: {
     fontSize: 14,
-    fontWeight: '500'
+    fontWeight: "500",
   },
 
   wrapper__label: {

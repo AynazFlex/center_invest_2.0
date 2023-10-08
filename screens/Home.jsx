@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import ScreenWrapper from "./components/ScreenWrapper";
 import {
   ClipPath,
@@ -94,7 +94,9 @@ export default function Home({ navigation }) {
           </Svg>
         </View>
         <Text style={styles.title}>Авторизация</Text>
-        <Text style={styles.subtitle}>Войдите в приложение через аккаунт в Госуслугах</Text>
+        <Text style={styles.subtitle}>
+          Войдите в приложение через аккаунт в Госуслугах
+        </Text>
         <Pressable
           style={styles.button}
           onPress={() => navigation.navigate("Gosuslugi")}
@@ -136,7 +138,6 @@ export default function Home({ navigation }) {
           </Svg>
           <Text style={styles.button__text}>Войти через Госуслуги</Text>
         </Pressable>
-        <StatusBar style="auto" />
       </View>
     </ScreenWrapper>
   );
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: 'center'
+    justifyContent: "center",
   },
 
   button: {
@@ -160,36 +161,36 @@ const styles = StyleSheet.create({
     borderColor: "#75777F",
     borderStyle: "solid",
     borderWidth: 1,
-    height: 52
+    height: 52,
   },
 
   button__text: {
     color: "#1B1B1F",
     fontSize: 14,
-    fontWeight: '500'
+    fontWeight: "500",
   },
 
   center_invest_label: {
-    position: 'absolute',
+    position: "absolute",
     top: 32,
-    left: '50%',
-    right: '50%',
+    left: "50%",
+    right: "50%",
     width: 152,
-    transform: [{translateX: -76}]
+    transform: [{ translateX: -76 }],
   },
 
   title: {
     fontSize: 24,
-    fontWeight: '400',
-    color: '#1B1B1F',
-    marginBottom: 8
+    fontWeight: "400",
+    color: "#1B1B1F",
+    marginBottom: 8,
   },
 
   subtitle: {
     fontSize: 14,
-    fontWeight: '400',
-    color: '#1B1B1F',
+    fontWeight: "400",
+    color: "#1B1B1F",
     marginBottom: 24,
-    textAlign: 'center'
-  }
+    textAlign: "center",
+  },
 });
