@@ -12,6 +12,12 @@ import IconWrapper from "./components/IconWrapper";
 import ScreenWrapper from "./components/ScreenWrapper";
 import useGoHome from "./custom_hooks/useGoHome";
 import BottomNav from "./components/BottomNav";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getCards } from "../store/dataReducer";
+import { useState } from "react";
+import LoadElem from "./components/LoadElem";
 
 const data = [];
 
@@ -26,6 +32,25 @@ const Item = ({ card, navigation }) => {
 
 export default function Profile({ navigation }) {
   useGoHome(navigation);
+  const { isPennding, cards, error_msg } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const [isFirstRender, setRender] = useState(true);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getCards());
+    }, [])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (cards) setRender(false);
+    }, [cards])
+  );
+
+  if (isPennding || isFirstRender) {
+    return <LoadElem />;
+  }
 
   return (
     <ScreenWrapper>
@@ -67,14 +92,12 @@ const styles = StyleSheet.create({
 
   header__user_name: {
     fontSize: 24,
-    fontFamily: "Roboto",
     fontWeight: "400",
     color: "#1B1B1F",
   },
 
   header__user_cashback: {
     fontSize: 14,
-    fontFamily: "Roboto",
     fontWeight: "400",
     color: "#44474F",
   },
@@ -82,7 +105,6 @@ const styles = StyleSheet.create({
   accounts: {
     marginTop: 32,
     fontSize: 22,
-    fontFamily: "Roboto",
     fontWeight: "400",
     color: "#1B1B1F",
   },
