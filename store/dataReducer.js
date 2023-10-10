@@ -21,41 +21,41 @@ const initialState = {
   isPending: false,
   error_msg: null,
   cards: null,
-  isAuth: false
+  isAuth: false,
 };
 
 const dataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {},
-  extraReducers: {
-    [setAuth.fulfilled]: (state, { payload }) => {
+  extraReducers: (builder) => {
+    builder.addCase(setAuth.fulfilled, (state, { payload }) => {
       const { access_token, token_type } = payload;
       state.access_token = access_token;
       state.token_type = token_type;
       state.isPending = false;
-      state.isAuth = true
-    },
-    [setAuth.pending]: (state) => {
+      state.isAuth = true;
+    });
+    builder.addCase(setAuth.pending, (state) => {
       state.isPending = true;
       state.error_msg = null;
-    },
-    [setAuth.rejected]: (state) => {
+    });
+    builder.addCase(setAuth.rejected, (state) => {
       state.error_msg = "Some error";
       state.isPending = false;
-    },
-    [getCards.fulfilled]: (state, { payload }) => {
+    });
+    builder.addCase(getCards.fulfilled, (state, { payload }) => {
       state.cards = payload;
       state.isPending = false;
-    },
-    [getCards.pending]: (state) => {
+    });
+    builder.addCase(getCards.pending, (state) => {
       state.isPending = true;
       state.error_msg = null;
-    },
-    [getCards.rejected]: (state) => {
+    });
+    builder.addCase(getCards.rejected, (state) => {
       state.error_msg = "Some error";
       state.isPending = false;
-    },
+    });
   },
 });
 
