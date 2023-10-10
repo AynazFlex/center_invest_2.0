@@ -16,9 +16,12 @@ export const getCards = createAsyncThunk("data/cards", async (_, thunkAPI) => {
 });
 
 const initialState = {
+  access_token: null,
+  token_type: null,
   isPending: false,
   error_msg: null,
-  value: null,
+  cards: null,
+  isAuth: false
 };
 
 const dataSlice = createSlice({
@@ -31,6 +34,7 @@ const dataSlice = createSlice({
       state.access_token = access_token;
       state.token_type = token_type;
       state.isPending = false;
+      state.isAuth = true
     },
     [setAuth.pending]: (state) => {
       state.isPending = true;
@@ -55,5 +59,5 @@ const dataSlice = createSlice({
   },
 });
 
-const { actions, reducer } = dataSlice;
+const { reducer } = dataSlice;
 export default reducer;

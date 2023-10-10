@@ -9,6 +9,8 @@ import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import store from "./store/store";
+import Notifications from './screens/Notifications'
+import LoadElem from "./screens/components/LoadElem";
 
 const getFonts = () =>
   Font.loadAsync({
@@ -38,9 +40,10 @@ export default function App() {
         >
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Gosuslugi" component={Gosuslugi} />
-          <Stack.Screen name="Welcome" component={Welcome} />
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="Statistics" component={Statistics} />
+          <Stack.Screen options={{animation: 'none'}} name="Welcome" component={Welcome} />
+          <Stack.Screen options={{animation: 'none'}} name="Profile" component={Profile} />
+          <Stack.Screen options={{animation: 'none'}} name="Statistics" component={Statistics} />
+          <Stack.Screen options={{animation: 'none'}} name="Notifications" component={Notifications} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

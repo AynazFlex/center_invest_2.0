@@ -2,7 +2,7 @@ import BottomNav from "./components/BottomNav";
 import ScreenWrapper from "./components/ScreenWrapper";
 import { Text, StyleSheet } from "react-native";
 
-export default function Notification({ navigation }) {
+export default function Notifications({ navigation }) {
   return (
     <ScreenWrapper>
       <Text>Уведомление</Text>

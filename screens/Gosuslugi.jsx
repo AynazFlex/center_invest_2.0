@@ -18,7 +18,7 @@ export default function Gosuslugi({ navigation }) {
   const [password, setPassword] = useState("");
   const [log_valid, setLog_valid] = useState(true);
   const [pass_valid, setPass_valid] = useState(true);
-  const { error_msg, isPending, value, isAuth } = useSelector((state) => state);
+  const { error_msg, isPending, isAuth } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const log_val = useRef(null);
@@ -56,15 +56,12 @@ export default function Gosuslugi({ navigation }) {
     }
     log_val.current.blur();
     pass_val.current.blur();
-    // dispatch(
-    //   setAuth({
-    //     username: login,
-    //     password,
-    //   })
-    // );
-    setTimeout(() => {
-      navigation.navigate("Welcome");
-    }, 2000);
+    dispatch(
+      setAuth({
+        username: login,
+        password,
+      })
+    );
   };
 
   const inputStyles = (flag) =>
