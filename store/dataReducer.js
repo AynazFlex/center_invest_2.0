@@ -12,6 +12,7 @@ const initialState = {
   isPending: false,
   error_msg: null,
   value: null,
+  isLogged: false
 };
 
 const dataSlice = createSlice({
@@ -23,6 +24,7 @@ const dataSlice = createSlice({
       state.value = payload;
       console.log(payload);
       state.isPending = false;
+      state.isLogged = true
     },
     [setAuth.pending]: (state) => {
       state.isPending = true;

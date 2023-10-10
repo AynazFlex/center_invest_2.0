@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { Provider } from "react-redux";
 import store from "./store/store";
+import Notifications from "./screens/Notifications";
 
 const getFonts = () =>
   Font.loadAsync({
@@ -45,8 +46,9 @@ export default function App() {
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Gosuslugi" component={Gosuslugi} />
           <Stack.Screen name="Welcome" component={Welcome} />
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="Statistics" component={Statistics} />
+          <Stack.Screen options={{animation: 'none'}} name="Profile" component={Profile} />
+          <Stack.Screen options={{animation: 'none'}} name="Statistics" component={Statistics} />
+          <Stack.Screen options={{animation: 'none'}} name="Notifications" component={Notifications} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

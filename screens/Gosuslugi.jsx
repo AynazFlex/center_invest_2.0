@@ -56,15 +56,15 @@ export default function Gosuslugi({ navigation }) {
     }
     log_val.current.blur();
     pass_val.current.blur();
-    dispatch(
-      setAuth({
-        username: login,
-        password,
-      })
-    );
-    // setTimeout(() => {
-    //   navigation.navigate("Welcome");
-    // }, 2000);
+    // dispatch(
+    //   setAuth({
+    //     username: login,
+    //     password,
+    //   })
+    // );
+    setTimeout(() => {
+      navigation.navigate("Welcome");
+    }, 2000);
   };
 
   const inputStyles = (flag) =>
