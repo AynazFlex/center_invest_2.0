@@ -18,7 +18,7 @@ export default function Gosuslugi({ navigation }) {
   const [password, setPassword] = useState("");
   const [log_valid, setLog_valid] = useState(true);
   const [pass_valid, setPass_valid] = useState(true);
-  const { error_msg, isPending, value } = useSelector((state) => state);
+  const { error_msg, isPending, value, isAuth } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const log_val = useRef(null);
@@ -35,8 +35,8 @@ export default function Gosuslugi({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      value && navigation.navigate("Welcome");
-    }, [value])
+      isAuth && navigation.navigate("Welcome");
+    }, [isAuth])
   );
 
   useFocusEffect(

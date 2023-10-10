@@ -7,10 +7,8 @@ import Profile from "./screens/Profile";
 import Statistics from "./screens/Statistics";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
 import { Provider } from "react-redux";
 import store from "./store/store";
-import Notifications from "./screens/Notifications";
 
 const getFonts = () =>
   Font.loadAsync({
@@ -29,12 +27,7 @@ export default function App() {
       .catch(() => console.warn);
   }, []);
 
-  if (!fontsLoaded)
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+  if (!fontsLoaded) return <LoadElem />;
 
   return (
     <Provider store={store}>
@@ -46,9 +39,8 @@ export default function App() {
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Gosuslugi" component={Gosuslugi} />
           <Stack.Screen name="Welcome" component={Welcome} />
-          <Stack.Screen options={{animation: 'none'}} name="Profile" component={Profile} />
-          <Stack.Screen options={{animation: 'none'}} name="Statistics" component={Statistics} />
-          <Stack.Screen options={{animation: 'none'}} name="Notifications" component={Notifications} />
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Statistics" component={Statistics} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
