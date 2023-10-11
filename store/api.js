@@ -24,3 +24,10 @@ export const fetchCards = async ({ access_token, token_type }) =>
       Authorization: `${token_type} ${access_token}`,
     },
   });
+
+export const fetchCard = async ({account_number, access_token, token_type}) => 
+  await instance.get(`/get_cashback_for_choose/?account_number=${account_number}`, {
+    headers: {
+      Authorization: `${token_type} ${access_token}`,
+    },
+  })

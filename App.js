@@ -11,6 +11,7 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import Notifications from './screens/Notifications'
 import LoadElem from "./screens/components/LoadElem";
+import Card from "./screens/Card";
 
 const getFonts = () =>
   Font.loadAsync({
@@ -44,6 +45,7 @@ export default function App() {
           <Stack.Screen options={{animation: 'none'}} name="Profile" component={Profile} />
           <Stack.Screen options={{animation: 'none'}} name="Statistics" component={Statistics} />
           <Stack.Screen options={{animation: 'none'}} name="Notifications" component={Notifications} />
+          <Stack.Screen options={{animation: 'none'}} name="Card" component={Card} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

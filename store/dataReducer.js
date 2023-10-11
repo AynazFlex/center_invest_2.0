@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchAuth, fetchCards } from "./api";
+import { fetchAuth, fetchCards, fetchCard } from "./api";
 
 export const setAuth = createAsyncThunk(
   "data/auth",
@@ -15,12 +15,19 @@ export const getCards = createAsyncThunk("data/cards", async (_, thunkAPI) => {
   return data;
 });
 
+export const getCard = createAsyncThunk("data/card", async (account_number, thunkAPI) => {
+  const { access_token, token_type } = thunkAPI.getState();
+  const { data } = await fetchCard({ account_number, access_token, token_type });
+  return data;
+})
+
 const initialState = {
   access_token: null,
   token_type: null,
   isPending: false,
   error_msg: null,
   cards: null,
+  card: null,
   isAuth: false,
 };
 
@@ -53,6 +60,18 @@ const dataSlice = createSlice({
       state.error_msg = null;
     });
     builder.addCase(getCards.rejected, (state) => {
+      state.error_msg = "Some error";
+      state.isPending = false;
+    });
+    builder.addCase(getCard.fulfilled, (state, { payload }) => {
+      state.card = payload;
+      state.isPending = false;
+    });
+    builder.addCase(getCard.pending, (state) => {
+      state.isPending = true;
+      state.error_msg = null;
+    });
+    builder.addCase(getCard.rejected, (state) => {
       state.error_msg = "Some error";
       state.isPending = false;
     });
