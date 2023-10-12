@@ -33,8 +33,8 @@ const Item = ({ item, navigation }) => (
     {!!item.cashbacks.length && (
       <View style={styles.card__cashbacks}>
         {item.cashbacks.map(({ product_type, value }) => (
-          <View style={styles.card__cashback_item}>
-            <CashbackIcon size={24} name={product_type} />
+          <View key={product_type} style={styles.card__cashback_item}>
+            <CashbackIcon size={16} name={product_type} />
             <Text style={styles.card__cashback_title}>
               {product_type} {value}%
             </Text>

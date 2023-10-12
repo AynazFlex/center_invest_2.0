@@ -23,7 +23,7 @@ export default function Home({ navigation }) {
             viewBox="0 0 152 32"
             fill="none"
           >
-            <G clip-path="url(#clip0_54499_35618)">
+            <G clipPath="url(#clip0_54499_35618)">
               <Path
                 d="M88.7983 18.5703H83.7688V20.9281H88.7983V18.5703Z"
                 fill="#50B848"
@@ -129,10 +129,10 @@ export default function Home({ navigation }) {
                 y2="16.5"
                 gradientUnits="userSpaceOnUse"
               >
-                <Stop stop-color="#0066B3" />
-                <Stop offset="0.354167" stop-color="#0066B3" />
-                <Stop offset="0.6875" stop-color="#EE2F53" />
-                <Stop offset="1" stop-color="#EE2F53" />
+                <Stop stopColor="#0066B3" />
+                <Stop offset="0.354167" stopColor="#0066B3" />
+                <Stop offset="0.6875" stopColor="#EE2F53" />
+                <Stop offset="1" stopColor="#EE2F53" />
               </LinearGradient>
             </Defs>
           </Svg>

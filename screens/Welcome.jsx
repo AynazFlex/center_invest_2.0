@@ -24,7 +24,7 @@ export default function Welcome({ navigation }) {
             viewBox="0 0 24 13"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <G stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <G stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
               <G transform="translate(-814.000000, -248.000000)">
                 <G transform="translate(100.000000, 100.000000)">
                   <G transform="translate(714.000000, 142.000000)">
