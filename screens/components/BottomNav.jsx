@@ -12,8 +12,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
     <View style={styles.wrapper}>
       <Pressable
         onPress={() => handlePress("Profile")}
-        backgroundColor={activeLink("Profile")}
-        style={styles.link}
+        style={[styles.link, { backgroundColor: activeLink("Profile") }]}
       >
         <Svg
           xmlns="http://www.w3.org/2000/svg"
@@ -34,8 +33,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
       </Pressable>
       <Pressable
         onPress={() => handlePress("Statistics")}
-        backgroundColor={activeLink("Statistics")}
-        style={styles.link}
+        style={[styles.link, { backgroundColor: activeLink("Statistics") }]}
       >
         <Svg
           xmlns="http://www.w3.org/2000/svg"
@@ -61,8 +59,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
       </Pressable>
       <Pressable
         onPress={() => handlePress("Notifications")}
-        backgroundColor={activeLink("Notifications")}
-        style={styles.link}
+        style={[styles.link, { backgroundColor: activeLink("Notifications") }]}
       >
         <Svg
           xmlns="http://www.w3.org/2000/svg"

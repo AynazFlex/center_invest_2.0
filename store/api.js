@@ -61,3 +61,12 @@ export const fetchChooseCardCashBack = async ({
     }
   );
 };
+
+export const fetchGetTransactions = async ({access_token, token_type}) => await instance.get(
+    "/transactions",
+    {
+      headers: {
+        Authorization: `${token_type} ${access_token}`,
+      },
+    }
+  )
