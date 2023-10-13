@@ -1,5 +1,12 @@
 import ScreenWrapper from "./components/ScreenWrapper";
-import { Pressable, Text, View, StyleSheet, FlatList } from "react-native";
+import {
+  Pressable,
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,12 +14,13 @@ import { getCard } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import { Svg, Path } from "react-native-svg";
 import CashbackIcon from "./components/CashbackIcon";
+import { fetchChooseCardCashBack } from "../store/api";
 
-const Item = ({ product_type, isChoose }) => {
+const Item = ({ product_type, isChoose, handleChooseCashBack }) => {
   return (
     <Pressable
       style={styles.cashbacks_item}
-      onPress={() => alert(product_type)}
+      onPress={() => handleChooseCashBack(product_type)}
     >
       <View style={styles.cashbacks_item_icon_wrapper}>
         <CashbackIcon size={24} name={product_type} />
@@ -54,25 +62,55 @@ const Item = ({ product_type, isChoose }) => {
 
 export default function Card({ navigation, route }) {
   const { account_number } = route.params;
-  const { isPending, error_msg, card } = useSelector((state) => state);
+  const { isPending, error_msg, card, access_token, token_type } = useSelector(
+    (state) => state
+  );
   const dispatch = useDispatch();
   const [cash, setCash] = useState([]);
+  const [isLoading, setLoad] = useState(false);
+
+  const handleChooseCashBack = (product_type) => {
+    if (cash.includes(product_type)) {
+      setCash((prev) => prev.filter((i) => i !== product_type));
+      return;
+    }
+    if (cash.length === 3) return;
+    setCash((prev) => [...prev, product_type]);
+  };
+
+  const isDone = cash.length === 3;
 
   useFocusEffect(
     useCallback(() => {
       dispatch(getCard(account_number));
 
-      return () => setCash([])
+      return () => setCash([]);
     }, [])
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      card && setCash(card.cashbacks.slice(0, 3).map(({product_type}) => product_type));
-    }, [card])
-  );
-
   if (!card || isPending) return <LoadElem />;
+
+  const handlePress = async () => {
+    setLoad(true);
+    try {
+      const cashback = card.cashbacks.filter(({ product_type }) =>
+        cash.includes(product_type)
+      );
+
+      await fetchChooseCardCashBack({
+        account_number,
+        access_token,
+        token_type,
+        cashback,
+      });
+
+      navigation.goBack();
+    } catch {
+      alert("error");
+    } finally {
+      setLoad(false);
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -99,17 +137,26 @@ export default function Card({ navigation, route }) {
         data={card.cashbacks}
         renderItem={({ item: { product_type } }) => (
           <Item
+            handleChooseCashBack={handleChooseCashBack}
             product_type={product_type}
             isChoose={cash.includes(product_type)}
           />
         )}
         keyExtractor={({ product_type }) => {
-          console.log(product_type);
           return product_type;
         }}
       />
-      <Pressable style={styles.done} onPress={() => alert('got')}>
-        <Text style={styles.done_text}>Готово</Text>
+      <Pressable
+        disabled={!isDone || isLoading}
+        style={[styles.done, { opacity: isDone ? 1 : 0.6 }]}
+        onPress={handlePress}
+      >
+        {isLoading || (
+          <Text style={styles.done_text}>
+            {isDone ? "Готово" : `Выберите ${3 - cash.length} кэшбэк(а)`}
+          </Text>
+        )}
+        {isLoading && <ActivityIndicator size={14} color="white" />}
       </Pressable>
     </ScreenWrapper>
   );
@@ -124,7 +171,7 @@ const styles = StyleSheet.create({
   },
   top_nav_text: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "#1B1B1F",
   },
   cashbacks_list: {
@@ -141,7 +188,7 @@ const styles = StyleSheet.create({
   },
   cashbacks_item_text: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
     color: "#1B1B1F",
   },
   cashbacks_item_check: {
@@ -161,15 +208,15 @@ const styles = StyleSheet.create({
   done: {
     height: 40,
     borderRadius: 10,
-    backgroundColor: '#006E0D',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#006E0D",
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 12,
-    marginBottom: 16
+    marginBottom: 16,
   },
   done_text: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#FFF'
-  }
+    fontWeight: "500",
+    color: "#FFF",
+  },
 });
