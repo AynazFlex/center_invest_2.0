@@ -38,32 +38,34 @@ const sortByDate = (transactions, k) => {
     const { account_number, bank, transactions } = item;
     transactions.forEach((transaction) => {
       const { category, time, value, name } = transaction;
-      const date = converDate(time);
       const kef = k[bank][category];
-      const back = kef ? (kef * value) / 100 : 0;
-      totalBack += back;
-      const object = {
-        account_number,
-        bank,
-        transaction: {
-          time,
-          name,
-          value,
-          category,
-          back,
-        },
-      };
+      if (kef) {
+        const date = converDate(time);
+        const back = (kef * value) / 100;
+        totalBack += back;
+        const object = {
+          account_number,
+          bank,
+          transaction: {
+            time,
+            name,
+            value,
+            category,
+            back,
+          },
+        };
 
-      if (mapOfCategories.has(category)) {
-        mapOfCategories.set(category, mapOfCategories.get(category) + 1);
-      } else {
-        mapOfCategories.set(category, 1);
-      }
+        if (mapOfCategories.has(category)) {
+          mapOfCategories.set(category, mapOfCategories.get(category) + 1);
+        } else {
+          mapOfCategories.set(category, 1);
+        }
 
-      if (map.has(date)) {
-        map.set(date, [...map.get(date), object]);
-      } else {
-        map.set(date, [object]);
+        if (map.has(date)) {
+          map.set(date, [...map.get(date), object]);
+        } else {
+          map.set(date, [object]);
+        }
       }
     });
   });

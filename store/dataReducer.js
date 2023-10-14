@@ -18,13 +18,17 @@ export const getCards = createAsyncThunk("data/cards", async (_, thunkAPI) => {
 export const getCard = createAsyncThunk(
   "data/card",
   async (account_number, thunkAPI) => {
-    const { access_token, token_type } = thunkAPI.getState();
-    const { data } = await fetchCard({
-      account_number,
-      access_token,
-      token_type,
-    });
-    return data;
+    try {
+      const { access_token, token_type } = thunkAPI.getState();
+      const { data } = await fetchCard({
+        account_number,
+        access_token,
+        token_type,
+      });
+      return data;
+    } catch ({ response }) {
+      return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
+    }
   }
 );
 
@@ -52,7 +56,11 @@ const initialState = {
 const dataSlice = createSlice({
   name: "data",
   initialState,
-  reducers: {},
+  reducers: {
+    resetError: (state) => {
+      state.error_msg = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(setAuth.fulfilled, (state, { payload }) => {
       const { access_token, token_type } = payload;
@@ -104,8 +112,9 @@ const dataSlice = createSlice({
       state.isPending = true;
       state.error_msg = null;
     });
-    builder.addCase(getCard.rejected, (state) => {
-      state.error_msg = "Some error";
+    builder.addCase(getCard.rejected, (state, { payload }) => {
+      console.log(payload);
+      state.error_msg = payload;
       state.isPending = false;
     });
     builder.addCase(getTransactions.fulfilled, (state, { payload }) => {
@@ -123,5 +132,6 @@ const dataSlice = createSlice({
   },
 });
 
-const { reducer } = dataSlice;
+const { reducer, actions } = dataSlice;
+export const { resetError } = actions;
 export default reducer;

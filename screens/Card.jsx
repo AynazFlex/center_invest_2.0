@@ -10,11 +10,12 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getCard } from "../store/dataReducer";
+import { getCard, resetError } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import { Svg, Path } from "react-native-svg";
 import CashbackIcon from "./components/CashbackIcon";
 import { fetchChooseCardCashBack } from "../store/api";
+import ModalWrapper from "./components/ModalWrapper";
 
 const Item = ({ product_type, isChoose, handleChooseCashBack }) => {
   return (
@@ -87,6 +88,22 @@ export default function Card({ navigation, route }) {
       return () => setCash([]);
     }, [])
   );
+
+  if (error_msg)
+    return (
+      <ModalWrapper>
+        <Text style={styles.error__text}>{error_msg}</Text>
+        <Pressable
+          style={styles.error__press}
+          onPress={() => {
+            navigation.goBack();
+            dispatch(resetError());
+          }}
+        >
+          <Text style={styles.error__press_text}>Ок</Text>
+        </Pressable>
+      </ModalWrapper>
+    );
 
   if (!card || isPending) return <LoadElem />;
 
@@ -218,5 +235,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
     color: "#FFF",
+  },
+  error__text: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: "#44474F",
+    marginBottom: 24,
+  },
+  error__press: {
+    marginLeft: "auto",
+  },
+  error__press_text: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#006E0D",
   },
 });
