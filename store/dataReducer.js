@@ -15,17 +15,27 @@ export const getCards = createAsyncThunk("data/cards", async (_, thunkAPI) => {
   return data;
 });
 
-export const getCard = createAsyncThunk("data/card", async (account_number, thunkAPI) => {
-  const { access_token, token_type } = thunkAPI.getState();
-  const { data } = await fetchCard({ account_number, access_token, token_type });
-  return data;
-})
+export const getCard = createAsyncThunk(
+  "data/card",
+  async (account_number, thunkAPI) => {
+    const { access_token, token_type } = thunkAPI.getState();
+    const { data } = await fetchCard({
+      account_number,
+      access_token,
+      token_type,
+    });
+    return data;
+  }
+);
 
-export const getTransactions = createAsyncThunk("data/transactions", async (_, thunkAPI) => {
-  const { access_token, token_type } = thunkAPI.getState();
-  const { data } = await fetchGetTransactions({ access_token, token_type });
-  return data
-})
+export const getTransactions = createAsyncThunk(
+  "data/transactions",
+  async (_, thunkAPI) => {
+    const { access_token, token_type } = thunkAPI.getState();
+    const { data } = await fetchGetTransactions({ access_token, token_type });
+    return data;
+  }
+);
 
 const initialState = {
   access_token: null,
@@ -34,8 +44,9 @@ const initialState = {
   error_msg: null,
   cards: null,
   card: null,
+  k: null,
   isAuth: false,
-  transactions: null
+  transactions: null,
 };
 
 const dataSlice = createSlice({
@@ -61,6 +72,21 @@ const dataSlice = createSlice({
     builder.addCase(getCards.fulfilled, (state, { payload }) => {
       state.cards = payload;
       state.isPending = false;
+      state.k = payload.reduce(
+        (res, i) => ({
+          ...res,
+          [i.bank]: {
+            ...i.cashbacks.reduce(
+              (r, item) => ({
+                ...r,
+                [item.product_type]: item.value,
+              }),
+              {}
+            ),
+          },
+        }),
+        {}
+      );
     });
     builder.addCase(getCards.pending, (state) => {
       state.isPending = true;
