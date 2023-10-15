@@ -10,16 +10,20 @@ export const setAuth = createAsyncThunk(
 );
 
 export const getCards = createAsyncThunk("data/cards", async (_, thunkAPI) => {
-  const { access_token, token_type } = thunkAPI.getState();
-  const { data } = await fetchCards({ access_token, token_type });
-  return data;
+  try {
+    const { access_token, token_type } = thunkAPI.getState().data;
+    const { data } = await fetchCards({ access_token, token_type });
+    return data;
+  } catch ({ response }) {
+    return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
+  }
 });
 
 export const getCard = createAsyncThunk(
   "data/card",
   async (account_number, thunkAPI) => {
     try {
-      const { access_token, token_type } = thunkAPI.getState();
+      const { access_token, token_type } = thunkAPI.getState().data;
       const { data } = await fetchCard({
         account_number,
         access_token,
@@ -35,7 +39,7 @@ export const getCard = createAsyncThunk(
 export const getTransactions = createAsyncThunk(
   "data/transactions",
   async (_, thunkAPI) => {
-    const { access_token, token_type } = thunkAPI.getState();
+    const { access_token, token_type } = thunkAPI.getState().data;
     const { data } = await fetchGetTransactions({ access_token, token_type });
     return data;
   }
@@ -59,6 +63,17 @@ const dataSlice = createSlice({
   reducers: {
     resetError: (state) => {
       state.error_msg = null;
+    },
+    setLogout: (state) => {
+      state.access_token = null;
+      state.token_type = null;
+      state.isPending = false;
+      state.error_msg = null;
+      state.cards = null;
+      state.card = null;
+      state.k = null;
+      state.isAuth = false;
+      state.transactions = null;
     },
   },
   extraReducers: (builder) => {
@@ -100,8 +115,8 @@ const dataSlice = createSlice({
       state.isPending = true;
       state.error_msg = null;
     });
-    builder.addCase(getCards.rejected, (state) => {
-      state.error_msg = "Some error";
+    builder.addCase(getCards.rejected, (state, { payload }) => {
+      state.error_msg = payload;
       state.isPending = false;
     });
     builder.addCase(getCard.fulfilled, (state, { payload }) => {
@@ -113,7 +128,6 @@ const dataSlice = createSlice({
       state.error_msg = null;
     });
     builder.addCase(getCard.rejected, (state, { payload }) => {
-      console.log(payload);
       state.error_msg = payload;
       state.isPending = false;
     });
@@ -133,5 +147,5 @@ const dataSlice = createSlice({
 });
 
 const { reducer, actions } = dataSlice;
-export const { resetError } = actions;
+export const { resetError, setLogout } = actions;
 export default reducer;

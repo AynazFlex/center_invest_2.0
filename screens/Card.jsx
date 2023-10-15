@@ -15,7 +15,7 @@ import LoadElem from "./components/LoadElem";
 import { Svg, Path } from "react-native-svg";
 import CashbackIcon from "./components/CashbackIcon";
 import { fetchChooseCardCashBack } from "../store/api";
-import ModalWrapper from "./components/ModalWrapper";
+import ErrorElem from "./components/ErrorElem";
 
 const Item = ({ product_type, isChoose, handleChooseCashBack }) => {
   return (
@@ -64,7 +64,7 @@ const Item = ({ product_type, isChoose, handleChooseCashBack }) => {
 export default function Card({ navigation, route }) {
   const { account_number } = route.params;
   const { isPending, error_msg, card, access_token, token_type } = useSelector(
-    (state) => state
+    ({ data }) => data
   );
   const dispatch = useDispatch();
   const [cash, setCash] = useState([]);
@@ -91,18 +91,13 @@ export default function Card({ navigation, route }) {
 
   if (error_msg)
     return (
-      <ModalWrapper>
-        <Text style={styles.error__text}>{error_msg}</Text>
-        <Pressable
-          style={styles.error__press}
-          onPress={() => {
-            navigation.goBack();
-            dispatch(resetError());
-          }}
-        >
-          <Text style={styles.error__press_text}>Ок</Text>
-        </Pressable>
-      </ModalWrapper>
+      <ErrorElem
+        callback={() => {
+          navigation.goBack();
+          dispatch(resetError());
+        }}
+        error_msg={error_msg}
+      />
     );
 
   if (!card || isPending) return <LoadElem />;
@@ -235,19 +230,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
     color: "#FFF",
-  },
-  error__text: {
-    fontSize: 14,
-    fontWeight: "400",
-    color: "#44474F",
-    marginBottom: 24,
-  },
-  error__press: {
-    marginLeft: "auto",
-  },
-  error__press_text: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#006E0D",
   },
 });

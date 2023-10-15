@@ -46,7 +46,6 @@ export const fetchChooseCardCashBack = async ({
     date.getMonth() + 1
   }-${date.getDate()}`;
 
-  console.log(month);
   await instance.post(
     "/choose_card_cashback",
     {
@@ -62,11 +61,16 @@ export const fetchChooseCardCashBack = async ({
   );
 };
 
-export const fetchGetTransactions = async ({access_token, token_type}) => await instance.get(
-    "/transactions",
-    {
-      headers: {
-        Authorization: `${token_type} ${access_token}`,
-      },
-    }
-  )
+export const fetchGetTransactions = async ({ access_token, token_type }) =>
+  await instance.get("/transactions", {
+    headers: {
+      Authorization: `${token_type} ${access_token}`,
+    },
+  });
+
+export const fetchLogout = async ({ access_token, token_type }) =>
+  await instance.get("/log_out", {
+    headers: {
+      Authorization: `${token_type} ${access_token}`,
+    },
+  });

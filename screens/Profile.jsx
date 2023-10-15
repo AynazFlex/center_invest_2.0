@@ -14,10 +14,12 @@ import BottomNav from "./components/BottomNav";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getCards } from "../store/dataReducer";
+import { getCards, setLogout } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import CashbackIcon from "./components/CashbackIcon";
 import BankIcon from "./components/BankIcon";
+import ErrorElem from "./components/ErrorElem";
+import { fetchLogout } from "../store/api";
 
 const Item = ({ item, navigation }) => (
   <View style={styles.card__wrapper}>
@@ -45,9 +47,11 @@ const Item = ({ item, navigation }) => (
     {item.can_choose_cashback && (
       <Pressable
         style={styles.card__button}
-        onPress={() => navigation.navigate('Card', {
-          account_number: item.account_number
-        })}
+        onPress={() =>
+          navigation.navigate("Card", {
+            account_number: item.account_number,
+          })
+        }
       >
         <Text style={styles.card__button_text}>
           {item.cashbacks.length ? "Поменять" : "Выбрать"} категории
@@ -59,7 +63,9 @@ const Item = ({ item, navigation }) => (
 
 export default function Profile({ navigation }) {
   useGoHome(navigation);
-  const { cards, error_msg, isPending } = useSelector((state) => state);
+  const { cards, error_msg, isPending, access_token, token_type } = useSelector(
+    ({ data }) => data
+  );
   const dispatch = useDispatch();
 
   useFocusEffect(
@@ -67,6 +73,18 @@ export default function Profile({ navigation }) {
       dispatch(getCards());
     }, [])
   );
+
+  if (error_msg)
+    return (
+      <ErrorElem
+        callback={async () => {
+          await fetchLogout({ access_token, token_type });
+          dispatch(setLogout());
+          navigation.popToTop();
+        }}
+        error_msg={error_msg}
+      />
+    );
 
   if (!cards || isPending) {
     return <LoadElem />;

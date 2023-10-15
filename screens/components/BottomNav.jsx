@@ -1,4 +1,4 @@
-import { View, Pressable, StyleSheet, Dimensions } from "react-native";
+import { View, Pressable, StyleSheet, Dimensions, Text } from "react-native";
 import { Path, Svg } from "react-native-svg";
 
 const windowWidth = Dimensions.get("window").width;
@@ -77,6 +77,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
             strokeLinejoin="round"
           />
         </Svg>
+        <Text style={styles.notif_num}>1</Text>
       </Pressable>
     </View>
   );
@@ -102,6 +103,20 @@ const styles = StyleSheet.create({
     width: 64,
     height: 32,
     borderRadius: 16,
+  },
+  notif_num: {
+    position: "absolute",
+    left: "50%",
+    top: 2,
+    textAlign: "center",
+    verticalAlign: "middle",
+    width: 16,
+    height: 16,
+    backgroundColor: "#BA1A1A",
+    fontSize: 11,
+    fontWeight: "500",
+    color: "#FFF",
+    borderRadius: "50%",
   },
 });
 

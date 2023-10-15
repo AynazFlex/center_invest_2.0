@@ -18,7 +18,7 @@ export default function Gosuslugi({ navigation }) {
   const [password, setPassword] = useState("");
   const [log_valid, setLog_valid] = useState(true);
   const [pass_valid, setPass_valid] = useState(true);
-  const { error_msg, isPending, isAuth } = useSelector((state) => state);
+  const { error_msg, isPending, isAuth } = useSelector(({ data }) => data);
   const dispatch = useDispatch();
 
   const log_val = useRef(null);

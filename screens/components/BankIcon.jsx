@@ -1,8 +1,16 @@
 import { View } from "react-native";
 import { Svg, Path } from "react-native-svg";
 
-const BankIcon = () => (
-  <View style={{ padding: 8, backgroundColor: "#FAF9FD" }}>
+const BankIcon = ({ color }) => (
+  <View
+    style={{
+      padding: 8,
+      backgroundColor: `${color || "#FAF9FD"}`,
+      width: 36,
+      height: 36,
+      borderRadius: "50%",
+    }}
+  >
     <Svg
       xmlns="http://www.w3.org/2000/svg"
       width="20"

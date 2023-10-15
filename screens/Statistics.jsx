@@ -141,7 +141,7 @@ const Item = ({ item }) => {
 
 export default function Statistics({ navigation }) {
   const { isPending, error_msg, transactions, k } = useSelector(
-    (state) => state
+    ({ data }) => data
   );
   const dispatch = useDispatch();
 
@@ -189,7 +189,7 @@ export default function Statistics({ navigation }) {
                 </G>
               </Svg>
               <Text style={styles.shopping__statistics_value}>
-                {totalBack} ₽
+                {totalBack.toFixed(1)} ₽
               </Text>
             </View>
             <Text style={styles.shopping__statistics_text}>
