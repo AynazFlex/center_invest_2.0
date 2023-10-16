@@ -171,7 +171,7 @@ const sortByDate = (transactions, k) => {
   };
 };
 
-const Item = ({ item }) => {
+const Item = ({ item, navigation }) => {
   console.log(item);
   const date = new Date(item[0]);
   const converDate = `${date.getDate()} ${
@@ -182,7 +182,7 @@ const Item = ({ item }) => {
     <View style={styles.shopping__item}>
       <Text style={styles.shopping__item_text}>{converDate}</Text>
       {item[1].map((i) => (
-        <Pressable onPress={() => console.log(i)} style={styles.shopping__item_wrapper} key={i.transaction.time}>
+        <Pressable onPress={() => navigation.navigate('Transaction', {...i})} style={styles.shopping__item_wrapper} key={i.transaction.time}>
           <View style={styles.shopping__item_icon}>
             <CashbackIcon size={16} name={i.transaction.category} />
           </View>
@@ -306,7 +306,7 @@ export default function Statistics({ navigation }) {
         style={styles.shopping}
         showsVerticalScrollIndicator={false}
         data={data}
-        renderItem={({ item }) => <Item item={item} />}
+        renderItem={({ item }) => <Item item={item} navigation={navigation} />}
         keyExtractor={(item) => item[0]}
       />
       <BottomNav navigation={navigation} active_sreen="Statistics" />

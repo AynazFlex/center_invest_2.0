@@ -12,6 +12,7 @@ import store from "./store/store";
 import Notifications from './screens/Notifications'
 import LoadElem from "./screens/components/LoadElem";
 import Card from "./screens/Card";
+import Transaction from "./screens/Transaction";
 
 const getFonts = () =>
   Font.loadAsync({
@@ -46,6 +47,7 @@ export default function App() {
           <Stack.Screen options={{animation: 'none'}} name="Statistics" component={Statistics} />
           <Stack.Screen options={{animation: 'none'}} name="Notifications" component={Notifications} />
           <Stack.Screen options={{animation: 'none'}} name="Card" component={Card} />
+          <Stack.Screen options={{animation: 'none'}} name="Transaction" component={Transaction} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
