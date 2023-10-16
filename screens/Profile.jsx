@@ -122,9 +122,12 @@ export default function Profile({ navigation }) {
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
-    gap: 12,
     alignItems: "center",
     marginTop: 16,
+  },
+
+  header__img: {
+    marginRight: 0
   },
 
   header__info: {},

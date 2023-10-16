@@ -1,13 +1,13 @@
 import { useFocusEffect } from "@react-navigation/native";
 import BottomNav from "./components/BottomNav";
 import ScreenWrapper from "./components/ScreenWrapper";
-import { FlatList, Text, View, StyleSheet } from "react-native";
+import { FlatList, Text, View, StyleSheet, Pressable } from "react-native";
 import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTransactions } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import CashbackIcon from "./components/CashbackIcon";
-import { G, Path, Svg } from "react-native-svg";
+import { G, Path, Svg, Circle } from "react-native-svg";
 
 const convertMonth = {
   0: "января",
@@ -24,9 +24,68 @@ const convertMonth = {
   11: "декабря",
 };
 
+const colorForCategories = {
+  автозапчасти: "#6B61FD",
+  аквариум: "#63B7FD",
+  напитки: "#FFBF00",
+  уборка: "#FFDB00",
+  одежда: "#B085F7",
+  "закуски и приправы": "#FFAB00",
+  "продукты питания": "#FF5F00",
+  видеоигры: "#78F1B5",
+  образование: "#4FBF29",
+  электроника: "#12DA8D",
+};
+
+const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
+  const radius = chartHeight / 2;
+  const centerX = chartWidth / 2;
+  const centerY = radius;
+
+  let startAngle = 0;
+
+  const renderSegments = () => {
+    return data.map((item, index) => {
+      const percentage = item.value / totalValue;
+      const angle = Math.PI * 2 * percentage;
+
+      const endAngle = startAngle + angle;
+
+      const startX = centerX + Math.cos(startAngle) * radius;
+      const startY = centerY + Math.sin(startAngle) * radius;
+
+      const endX = centerX + Math.cos(endAngle) * radius;
+      const endY = centerY + Math.sin(endAngle) * radius;
+
+      const largeArcFlag = angle > Math.PI ? 1 : 0;
+
+      const pathData = `M${startX},${startY} A${radius},${radius} 0 ${largeArcFlag},1 ${endX},${endY} L${centerX},${centerY}`;
+
+      startAngle = endAngle;
+
+      return <Path key={index} d={pathData} fill={item.color} />;
+    });
+  };
+
+  return (
+    <Svg height={chartHeight} width={chartWidth}>
+      <Circle
+        cx={centerX}
+        cy={centerY}
+        r={radius}
+        fill="transparent"
+        stroke="gray"
+        strokeWidth="1"
+      />
+      {renderSegments()}
+    </Svg>
+  );
+};
+
 const sortByDate = (transactions, k) => {
   const map = new Map();
   const mapOfCategories = new Map();
+  const mapForDiagram = new Map();
   let totalBack = 0;
 
   const converDate = (time) => {
@@ -54,6 +113,12 @@ const sortByDate = (transactions, k) => {
             back,
           },
         };
+
+        if (mapForDiagram.has(category)) {
+          mapForDiagram.set(category, mapForDiagram.get(category) + back);
+        } else {
+          mapForDiagram.set(category, back);
+        }
 
         if (mapOfCategories.has(category)) {
           mapOfCategories.set(category, mapOfCategories.get(category) + 1);
@@ -92,6 +157,17 @@ const sortByDate = (transactions, k) => {
     data: [...map].sort((a, b) => new Date(b[0]) - new Date(a[0])),
     totalBack,
     mostPopularCategories: maxCategories().category,
+    diagram: [...mapForDiagram].reduce(
+      (res, [label, value]) => [
+        ...res,
+        {
+          label,
+          value,
+          color: colorForCategories[label],
+        },
+      ],
+      []
+    ),
   };
 };
 
@@ -106,7 +182,7 @@ const Item = ({ item }) => {
     <View style={styles.shopping__item}>
       <Text style={styles.shopping__item_text}>{converDate}</Text>
       {item[1].map((i) => (
-        <View style={styles.shopping__item_wrapper} key={i.transaction.time}>
+        <Pressable onPress={() => console.log(i)} style={styles.shopping__item_wrapper} key={i.transaction.time}>
           <View style={styles.shopping__item_icon}>
             <CashbackIcon size={16} name={i.transaction.category} />
           </View>
@@ -133,7 +209,7 @@ const Item = ({ item }) => {
               <Text style={styles.shopping__item_bottom_text}>{i.bank}</Text>
             </View>
           </View>
-        </View>
+        </Pressable>
       ))}
     </View>
   );
@@ -155,16 +231,23 @@ export default function Statistics({ navigation }) {
     return <LoadElem />;
   }
 
-  const { data, totalBack, mostPopularCategories } = sortByDate(
+  const { data, totalBack, mostPopularCategories, diagram } = sortByDate(
     transactions,
     k
   );
+
+  console.log(diagram);
 
   return (
     <ScreenWrapper>
       <View style={styles.shopping__statistics}>
         <View style={styles.shopping__statistics_wrapper}>
-          <View style={{ width: 98 }}></View>
+          <PieChart
+            data={diagram}
+            chartHeight="98"
+            chartWidth="98"
+            totalValue={totalBack}
+          />
         </View>
         <View style={{ flexGrow: 1 }}>
           <View
@@ -208,6 +291,16 @@ export default function Statistics({ navigation }) {
             </Text>
           </View>
         </View>
+      </View>
+      <View style={[styles.shopping__statistics_wrapper, { marginTop: 16 }]}>
+        <View style={styles.shopping__catigories}>
+          {diagram.map(({label}) => (
+            <View key={label} style={styles.shopping__statistics_category}>
+              <CashbackIcon size={16} name={label} />
+            </View>
+          ))}
+        </View>
+        <Text style={styles.shopping__statistics_text}>Категории</Text>
       </View>
       <FlatList
         style={styles.shopping}
@@ -292,6 +385,13 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 12,
     backgroundColor: "#EFEDF1",
+  },
+
+  shopping__catigories: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    flexWrap: "wrap",
   },
 
   shopping__statistics: {
