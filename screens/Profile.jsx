@@ -80,7 +80,7 @@ export default function Profile({ navigation }) {
         callback={async () => {
           await fetchLogout({ access_token, token_type });
           dispatch(setLogout());
-          navigation.popToTop();
+          navigation.push('Home')
         }}
         error_msg={error_msg}
       />
@@ -92,6 +92,16 @@ export default function Profile({ navigation }) {
 
   return (
     <ScreenWrapper>
+      <Pressable
+        style={styles.exit}
+        onPress={async () => {
+          await fetchLogout({ access_token, token_type });
+          dispatch(setLogout());
+          navigation.push('Home')
+        }}
+      >
+        <Text style={styles.exit__text}>Exit</Text>
+      </Pressable>
       <View style={styles.header}>
         <Image
           width={48}
@@ -126,8 +136,25 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 
+  exit: {
+    fontSize: 14,
+    position: "absolute",
+    top: 16,
+    right: 16,
+    zIndex: 99,
+    backgroundColor: '#FAF9FD',
+    padding: 8,
+    borderRadius: 8
+  },
+
+  exit__text: {
+    fontSize: 14,
+    color: "#1B1B1F",
+    fontWeight: '500'
+  },
+
   header__img: {
-    marginRight: 0
+    marginRight: 0,
   },
 
   header__info: {},
