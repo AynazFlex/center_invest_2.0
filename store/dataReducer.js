@@ -39,9 +39,13 @@ export const getCard = createAsyncThunk(
 export const getTransactions = createAsyncThunk(
   "data/transactions",
   async (_, thunkAPI) => {
-    const { access_token, token_type } = thunkAPI.getState().data;
-    const { data } = await fetchGetTransactions({ access_token, token_type });
-    return data;
+    try {
+      const { access_token, token_type } = thunkAPI.getState().data;
+      const { data } = await fetchGetTransactions({ access_token, token_type });
+      return data;
+    } catch ({ response }) {
+      return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
+    }
   }
 );
 
@@ -139,8 +143,8 @@ const dataSlice = createSlice({
       state.isPending = true;
       state.error_msg = null;
     });
-    builder.addCase(getTransactions.rejected, (state) => {
-      state.error_msg = "Some error";
+    builder.addCase(getTransactions.rejected, (state, { payload }) => {
+      state.error_msg = payload;
       state.isPending = false;
     });
   },

@@ -12,7 +12,7 @@ import ScreenWrapper from "./components/ScreenWrapper";
 import useGoHome from "./custom_hooks/useGoHome";
 import BottomNav from "./components/BottomNav";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getCards, setLogout } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
@@ -62,10 +62,11 @@ const Item = ({ item, navigation }) => (
 );
 
 export default function Profile({ navigation }) {
-  useGoHome(navigation);
+  // useGoHome(navigation);
   const { cards, error_msg, isPending, access_token, token_type } = useSelector(
     ({ data }) => data
   );
+  const [local_error, setError] = useState(null);
   const dispatch = useDispatch();
 
   useFocusEffect(
@@ -74,17 +75,28 @@ export default function Profile({ navigation }) {
     }, [])
   );
 
-  if (error_msg)
+  const logout = async () => {
+    try {
+      console.log(access_token, token_type);
+      await fetchLogout({ access_token, token_type });
+      dispatch(setLogout());
+      navigation.push("Home");
+    } catch ({ response }) {
+      setError(response.data.detail || "Error :/");
+    }
+  };
+
+  if (local_error)
     return (
       <ErrorElem
-        callback={async () => {
-          await fetchLogout({ access_token, token_type });
-          dispatch(setLogout());
-          navigation.push('Home')
+        callback={() => {
+          setError(null);
         }}
-        error_msg={error_msg}
+        error_msg={local_error}
       />
     );
+
+  if (error_msg) return <ErrorElem callback={logout} error_msg={error_msg} />;
 
   if (!cards || isPending) {
     return <LoadElem />;
@@ -92,14 +104,7 @@ export default function Profile({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Pressable
-        style={styles.exit}
-        onPress={async () => {
-          await fetchLogout({ access_token, token_type });
-          dispatch(setLogout());
-          navigation.push('Home')
-        }}
-      >
+      <Pressable style={styles.exit} onPress={logout}>
         <Text style={styles.exit__text}>Exit</Text>
       </Pressable>
       <View style={styles.header}>
@@ -142,19 +147,19 @@ const styles = StyleSheet.create({
     top: 16,
     right: 16,
     zIndex: 99,
-    backgroundColor: '#FAF9FD',
+    backgroundColor: "#FAF9FD",
     padding: 8,
-    borderRadius: 8
+    borderRadius: 8,
   },
 
   exit__text: {
     fontSize: 14,
     color: "#1B1B1F",
-    fontWeight: '500'
+    fontWeight: "500",
   },
 
   header__img: {
-    marginRight: 0,
+    marginRight: 8,
   },
 
   header__info: {},
@@ -203,12 +208,12 @@ const styles = StyleSheet.create({
   card__bank: {
     color: "#1B1B1F",
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: "500",
   },
 
   card__no: {
     fontSize: 12,
-    fontWeight: 400,
+    fontWeight: "400",
     color: "#44474F",
   },
 
@@ -232,7 +237,7 @@ const styles = StyleSheet.create({
 
   card__cashback_title: {
     fontSize: 12,
-    fontWeight: 400,
+    fontWeight: "400",
     color: "#44474F",
   },
 
@@ -250,7 +255,7 @@ const styles = StyleSheet.create({
 
   card__button_text: {
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: "500",
     color: "#1B1B1F",
   },
 });

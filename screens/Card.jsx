@@ -66,6 +66,7 @@ export default function Card({ navigation, route }) {
   const { isPending, error_msg, card, access_token, token_type } = useSelector(
     ({ data }) => data
   );
+  const [local_error, setError] = useState(null);
   const dispatch = useDispatch();
   const [cash, setCash] = useState([]);
   const [isLoading, setLoad] = useState(false);
@@ -100,6 +101,17 @@ export default function Card({ navigation, route }) {
       />
     );
 
+  if (local_error)
+    return (
+      <ErrorElem
+        callback={() => {
+          navigation.goBack();
+          setError(null);
+        }}
+        error_msg={local_error}
+      />
+    );
+
   if (!card || isPending) return <LoadElem />;
 
   const handlePress = async () => {
@@ -117,8 +129,8 @@ export default function Card({ navigation, route }) {
       });
 
       navigation.goBack();
-    } catch {
-      alert("error");
+    } catch ({ response }) {
+      setError(response.data.detail || "Error :/");
     } finally {
       setLoad(false);
     }

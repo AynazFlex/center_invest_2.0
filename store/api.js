@@ -1,8 +1,17 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://151.248.126.126/api/v1",
+  baseURL: "https://fp.centrinvest.ru/api/v1",
 });
+
+const getWrapper =
+  (url) =>
+  async ({ access_token, token_type }) =>
+    await instance.get(url, {
+      headers: {
+        Authorization: `${token_type} ${access_token}`,
+      },
+    });
 
 export const fetchAuth = async ({ username, password }) =>
   await instance.post(
@@ -18,12 +27,7 @@ export const fetchAuth = async ({ username, password }) =>
     }
   );
 
-export const fetchCards = async ({ access_token, token_type }) =>
-  await instance.get("/cards", {
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-    },
-  });
+export const fetchCards = getWrapper("/cards");
 
 export const fetchCard = async ({ account_number, access_token, token_type }) =>
   await instance.get(
@@ -47,7 +51,7 @@ export const fetchChooseCardCashBack = async ({
   }-${date.getDate()}`;
 
   await instance.post(
-    "/choose_card_cashback",
+    "/choose_card_cashback/",
     {
       account_number,
       month,
@@ -62,14 +66,14 @@ export const fetchChooseCardCashBack = async ({
 };
 
 export const fetchGetTransactions = async ({ access_token, token_type }) =>
-  await instance.get("/transactions", {
+  await instance.get("/transactions/", {
     headers: {
       Authorization: `${token_type} ${access_token}`,
     },
   });
 
 export const fetchLogout = async ({ access_token, token_type }) =>
-  await instance.get("/log_out", {
+  await instance.get("/log_out/", {
     headers: {
       Authorization: `${token_type} ${access_token}`,
     },

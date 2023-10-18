@@ -8,7 +8,7 @@ const BankIcon = ({ color }) => (
       backgroundColor: `${color || "#FAF9FD"}`,
       width: 36,
       height: 36,
-      borderRadius: "50%",
+      borderRadius: 18,
     }}
   >
     <Svg

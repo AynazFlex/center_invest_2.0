@@ -1,7 +1,5 @@
-import { View, Pressable, StyleSheet, Dimensions, Text } from "react-native";
+import { View, Pressable, StyleSheet, Text } from "react-native";
 import { Path, Svg } from "react-native-svg";
-
-const windowWidth = Dimensions.get("window").width;
 
 const BottomNav = ({ navigation, active_sreen }) => {
   const activeLink = (val) => (active_sreen === val ? "#95F7B9" : "#EFEDF1");
@@ -10,6 +8,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
 
   return (
     <View style={styles.wrapper}>
+      <View style={[styles.panel, { left: -16 }]} />
       <Pressable
         onPress={() => handlePress("Profile")}
         style={[styles.link, { backgroundColor: activeLink("Profile") }]}
@@ -79,6 +78,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
         </Svg>
         <Text style={styles.notif_num}>1</Text>
       </Pressable>
+      <View style={[styles.panel, { right: -16 }]} />
     </View>
   );
 };
@@ -87,13 +87,20 @@ const styles = StyleSheet.create({
   wrapper: {
     position: "absolute",
     bottom: 0,
-    left: 0,
-    width: '100%',
+    left: 16,
+    width: "100%",
     paddingHorizontal: 31,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 16,
-    paddingBottom: 18,
+    paddingBottom: 16,
+    backgroundColor: "#EFEDF1",
+  },
+  panel: {
+    width: 16,
+    height: 64,
+    position: "absolute",
+    top: 0,
     backgroundColor: "#EFEDF1",
   },
   link: {
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "500",
     color: "#FFF",
-    borderRadius: "50%",
+    borderRadius: 8,
   },
 });
 

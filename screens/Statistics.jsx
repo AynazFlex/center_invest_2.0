@@ -4,7 +4,7 @@ import ScreenWrapper from "./components/ScreenWrapper";
 import { FlatList, Text, View, StyleSheet, Pressable } from "react-native";
 import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getTransactions } from "../store/dataReducer";
+import { getTransactions, resetError } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import CashbackIcon from "./components/CashbackIcon";
 import { G, Path, Svg, Circle } from "react-native-svg";
@@ -182,7 +182,11 @@ const Item = ({ item, navigation }) => {
     <View style={styles.shopping__item}>
       <Text style={styles.shopping__item_text}>{converDate}</Text>
       {item[1].map((i) => (
-        <Pressable onPress={() => navigation.navigate('Transaction', {...i})} style={styles.shopping__item_wrapper} key={i.transaction.time}>
+        <Pressable
+          onPress={() => navigation.navigate("Transaction", { ...i })}
+          style={styles.shopping__item_wrapper}
+          key={i.transaction.time}
+        >
           <View style={styles.shopping__item_icon}>
             <CashbackIcon size={16} name={i.transaction.category} />
           </View>
@@ -226,6 +230,17 @@ export default function Statistics({ navigation }) {
       dispatch(getTransactions());
     }, [])
   );
+
+  if (error_msg)
+    return (
+      <ErrorElem
+        callback={() => {
+          navigation.goBack();
+          dispatch(resetError());
+        }}
+        error_msg={error_msg}
+      />
+    );
 
   if (!transactions || isPending) {
     return <LoadElem />;
@@ -294,7 +309,7 @@ export default function Statistics({ navigation }) {
       </View>
       <View style={[styles.shopping__statistics_wrapper, { marginTop: 16 }]}>
         <View style={styles.shopping__catigories}>
-          {diagram.map(({label}) => (
+          {diagram.map(({ label }) => (
             <View key={label} style={styles.shopping__statistics_category}>
               <CashbackIcon size={16} name={label} />
             </View>
@@ -340,7 +355,7 @@ const styles = StyleSheet.create({
   },
 
   shopping__item_icon: {
-    borderRadius: "50%",
+    borderRadius: 16,
     padding: 8,
     backgroundColor: "#EFEDF1",
   },

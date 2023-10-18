@@ -1,21 +1,24 @@
-import ScreenWrapper from "./ScreenWrapper";
 import ModalWrapper from "./ModalWrapper";
-import { Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet, StatusBar } from "react-native";
 
 export default function ErrorElem({ callback, error_msg }) {
   return (
-    <ScreenWrapper>
+    <View style={styles.error}>
       <ModalWrapper>
         <Text style={styles.error__text}>{error_msg}</Text>
         <Pressable style={styles.error__press} onPress={callback}>
           <Text style={styles.error__press_text}>Ок</Text>
         </Pressable>
       </ModalWrapper>
-    </ScreenWrapper>
+      <StatusBar backgroundColor={"#95F7B9"} style="auto" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  error: {
+    flex: 1,
+  },
   error__text: {
     fontSize: 14,
     fontWeight: "400",
