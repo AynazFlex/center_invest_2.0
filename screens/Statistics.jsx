@@ -86,7 +86,7 @@ const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
       </View>
       <View>
         {[...categoriesMap].map(([label, value]) => (
-          <View style={styles.shopping__statistics_category}>
+          <View key={label} style={styles.shopping__statistics_category}>
             <View
               style={{
                 height: 16,
@@ -204,11 +204,11 @@ const Item = ({ item, navigation }) => {
   return (
     <View style={styles.shopping__item}>
       <Text style={styles.shopping__item_text}>{converDate}</Text>
-      {item[1].map((i) => (
+      {item[1].map((i, index) => (
         <Pressable
           onPress={() => navigation.navigate("Transaction", { ...i })}
           style={styles.shopping__item_wrapper}
-          key={i.transaction.time}
+          key={i.transaction.time + index}
         >
           <View style={styles.shopping__item_icon}>
             <CashbackIcon size={16} name={i.transaction.category} />
@@ -399,8 +399,8 @@ const styles = StyleSheet.create({
   },
 
   shopping__item_bottom_text: {
-    fontWeight: 12,
-    fontSize: "400",
+    fontWeight: "400",
+    fontSize: 12,
     color: "#44474F",
   },
 
