@@ -153,7 +153,7 @@ export default function Card({ navigation, route }) {
             />
           </Svg>
         </Pressable>
-        <Text style={styles.top_nav_text}>Выбор категорий кешбека</Text>
+        <Text style={styles.top_nav_text}>Выбор категорий кешбэка</Text>
       </View>
       <FlatList
         style={styles.cashbacks_list}

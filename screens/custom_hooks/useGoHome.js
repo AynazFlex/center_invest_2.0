@@ -1,14 +1,8 @@
 import { useCallback } from "react";
 import { Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { fetchLogout } from "../../store/api";
-import { useDispatch, useSelector } from "react-redux";
-import { setLogout } from "../../store/dataReducer";
 
-export default function useGoHome(navigation) {
-  const { access_token, token_type } = useSelector(({ data }) => data);
-  const dispatch = useDispatch();
-
+export default function useGoHome(navigation, callback) {
   useFocusEffect(
     useCallback(() => {
       const goHome = (e) => {
@@ -23,9 +17,7 @@ export default function useGoHome(navigation) {
             style: "destructive",
             onPress: async () => {
               navigation.removeListener("beforeRemove", goHome);
-              await fetchLogout({ access_token, token_type });
-              dispatch(setLogout());
-              navigation.popToTop();
+              await callback();
             },
           },
         ]);

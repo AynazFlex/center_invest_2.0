@@ -6,8 +6,6 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import { Circle, G, Path, Polygon, Svg } from "react-native-svg";
-import IconWrapper from "./components/IconWrapper";
 import ScreenWrapper from "./components/ScreenWrapper";
 import useGoHome from "./custom_hooks/useGoHome";
 import BottomNav from "./components/BottomNav";
@@ -24,7 +22,18 @@ import { fetchLogout } from "../store/api";
 const Item = ({ item, navigation }) => (
   <View style={styles.card__wrapper}>
     <View style={styles.card__header}>
-      <BankIcon />
+      {item.bank === "Центр-инвест" ? (
+        <BankIcon />
+      ) : (
+        <View
+          style={{
+            backgroundColor: "#FAF9FD",
+            width: 36,
+            height: 36,
+            borderRadius: 18,
+          }}
+        ></View>
+      )}
       <View>
         <Text style={styles.card__bank}>{item.bank}</Text>
         {!item.can_choose_cashback && !item.cashbacks.length && (
@@ -62,7 +71,6 @@ const Item = ({ item, navigation }) => (
 );
 
 export default function Profile({ navigation }) {
-  // useGoHome(navigation);
   const { cards, error_msg, isPending, access_token, token_type } = useSelector(
     ({ data }) => data
   );
@@ -77,7 +85,6 @@ export default function Profile({ navigation }) {
 
   const logout = async () => {
     try {
-      console.log(access_token, token_type);
       await fetchLogout({ access_token, token_type });
       dispatch(setLogout());
       navigation.push("Home");
@@ -85,6 +92,8 @@ export default function Profile({ navigation }) {
       setError(response.data.detail || "Error :/");
     }
   };
+
+  useGoHome(navigation, logout);
 
   if (local_error)
     return (
@@ -104,9 +113,6 @@ export default function Profile({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Pressable style={styles.exit} onPress={logout}>
-        <Text style={styles.exit__text}>Exit</Text>
-      </Pressable>
       <View style={styles.header}>
         <Image
           width={48}
@@ -116,9 +122,6 @@ export default function Profile({ navigation }) {
         />
         <View style={styles.header__info}>
           <Text style={styles.header__user_name}>Александр</Text>
-          <Text style={styles.header__user_cashback}>
-            В этом месяце 1 321,3 ₽ кешбека
-          </Text>
         </View>
       </View>
       <Text style={styles.accounts}>Счета</Text>
@@ -139,23 +142,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 16,
-  },
-
-  exit: {
-    fontSize: 14,
-    position: "absolute",
-    top: 16,
-    right: 16,
-    zIndex: 99,
-    backgroundColor: "#FAF9FD",
-    padding: 8,
-    borderRadius: 8,
-  },
-
-  exit__text: {
-    fontSize: 14,
-    color: "#1B1B1F",
-    fontWeight: "500",
   },
 
   header__img: {
@@ -213,6 +199,7 @@ const styles = StyleSheet.create({
 
   card__no: {
     fontSize: 12,
+    lineHeight: 12,
     fontWeight: "400",
     color: "#44474F",
   },

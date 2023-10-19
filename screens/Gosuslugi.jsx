@@ -72,7 +72,7 @@ export default function Gosuslugi({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={[styles.title__1_step, styles.title__all]}>ГОС</Text>
+        <Text style={[styles.title__1_step, styles.title__all]}>РОС</Text>
         <Text style={[styles.title__2_step, styles.title__all]}>УСЛУГИ</Text>
       </View>
 

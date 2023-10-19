@@ -58,7 +58,18 @@ export default function Transaction({ navigation, route }) {
       </View>
       <Text style={styles.chak}>Счет списания</Text>
       <View style={styles.bank}>
-        <BankIcon />
+        {bank === "Центр-инвест" ? (
+          <BankIcon />
+        ) : (
+          <View
+            style={{
+              backgroundColor: "#FAF9FD",
+              width: 36,
+              height: 36,
+              borderRadius: 18,
+            }}
+          ></View>
+        )}
         <View>
           <Text style={styles.bank__name}>{bank}</Text>
           <Text style={styles.bank__number}>{account_number}</Text>
@@ -79,6 +90,7 @@ const styles = StyleSheet.create({
   nav__time: {
     color: "#1B1B1F",
     fontSize: 16,
+    lineHeight: 16,
     fontWeight: "400",
   },
 
