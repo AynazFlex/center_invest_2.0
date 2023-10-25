@@ -104,7 +104,9 @@ export default function Profile({ navigation }) {
           source={require("../assets/image/user_icon.png")}
         />
         <View style={styles.header__info}>
+          <Pressable onPress={() => dispatch(setLogout())}>
           <Text style={styles.header__user_name}>Александр</Text>
+          </Pressable>
         </View>
       </View>
       <Text style={styles.accounts}>Счета</Text>

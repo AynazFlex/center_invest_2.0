@@ -48,7 +48,7 @@ export const fetchChooseCardCashBack = async ({
     date.getMonth() + 1
   }-${date.getDate()}`;
 
-  await instance.post(
+  return await instance.post(
     "/choose_card_cashback/",
     {
       account_number,

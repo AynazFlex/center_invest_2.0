@@ -36,6 +36,8 @@ export const colorForCategories = {
   электроника: "#12DA8D",
 };
 
+const formater = (arg) => arg < 10 ? `0${arg}` : arg
+
 const setStatistics = (transactions, k) => {
   const map = new Map();
   const mapOfCategories = new Map();
@@ -181,12 +183,13 @@ export const setNewCashbacks = createAsyncThunk(
   async ({ account_number, cashback }, thunkAPI) => {
     try {
       const { access_token, token_type } = thunkAPI.getState().data;
-      await fetchChooseCardCashBack({
+      const { data } = await fetchChooseCardCashBack({
         account_number,
         cashback,
         access_token,
         token_type,
       });
+      return data;
     } catch ({ response }) {
       return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
     }
@@ -231,8 +234,8 @@ const initialState = {
     {
       title: "Центр-инвест",
       body: "Ваше обращение №15446 рассмотрено. Категория операции «Ремонт61» изменена с Аквариум на Автозапчасти",
-      time: "01:66 06.10.2023",
-    },
+      time: "01:56 06.10.2023",
+    }
   ],
 };
 
@@ -296,23 +299,19 @@ const dataSlice = createSlice({
     builder.addCase(getTransactions.rejected, rejected);
     builder.addCase(setLogout.fulfilled, (state) => {
       Object.keys(state).forEach((key) => (state[key] = initialState[key]));
-      // state.access_token = null;
-      // state.token_type = null;
-      // state.isPending = false;
-      // state.error_msg = null;
-      // state.cards = null;
-      // state.card = null;
-      // state.k = null;
-      // state.isAuth = false;
-      // state.transactions = null;
-      // state.isDone = false;
-      // state.statistics = null;
     });
     builder.addCase(setLogout.pending, pending);
     builder.addCase(setLogout.rejected, rejected);
-    builder.addCase(setNewCashbacks.fulfilled, (state) => {
+    builder.addCase(setNewCashbacks.fulfilled, (state, {payload}) => {
       state.isPending = false;
       state.isDone = true;
+
+      const date = new Date();
+      state.notifications.push({
+        title: "Центр-инвест",
+        body: `Ваше обращение №${Math.floor(Math.random()*2000 + 1000)} рассмотрено. Вы выбрали кешбэки${payload.reduce((str, {product_type}) => `${str} ${product_type},`, "")}`,
+        time: `${formater(date.getHours())}:${formater(date.getMinutes())} ${formater(date.getDate())}.${formater(date.getMonth() + 1)}.${date.getFullYear()}`,
+      })
     });
     builder.addCase(setNewCashbacks.pending, pending);
     builder.addCase(setNewCashbacks.rejected, rejected);

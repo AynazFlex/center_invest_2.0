@@ -2,7 +2,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import BottomNav from "./components/BottomNav";
 import ScreenWrapper from "./components/ScreenWrapper";
 import { FlatList, Text, View, StyleSheet, Pressable } from "react-native";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTransactions, resetError } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
@@ -228,10 +228,14 @@ export default function Statistics({ navigation }) {
   );
   const dispatch = useDispatch();
   const [category, setCategory] = useState(null);
+  const view_categories = useRef(null)
+
+  useEffect(() => {
+    console.log(view_categories.current)
+  }, [view_categories])
 
   useFocusEffect(
     useCallback(() => {
-      console.log("focus");
       transactions || dispatch(getTransactions());
     }, [transactions])
   );
@@ -303,7 +307,13 @@ export default function Statistics({ navigation }) {
           </Text>
         </View>
       </View>
-      <View style={[styles.shopping__statistics_wrapper, { marginTop: 8 }]}>
+      <View
+        style={[
+          styles.shopping__statistics_wrapper,
+          { marginTop: 8 },
+        ]}
+        ref={view_categories}
+      >
         <View style={styles.shopping__catigories}>
           {diagram.map(({ label }) => (
             <Pressable

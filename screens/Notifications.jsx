@@ -1,8 +1,25 @@
 import BottomNav from "./components/BottomNav";
 import ScreenWrapper from "./components/ScreenWrapper";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, FlatList } from "react-native";
 import BankIcon from "./components/BankIcon";
 import { useSelector } from "react-redux";
+
+const Item = ({item}) => {
+  return (
+    <View style={styles.mess}>
+      <View style={styles.mess__body}>
+        <Text style={styles.mess__body_title}>{item.title}</Text>
+        <Text style={styles.mess__body_body}>
+          {item.body}
+        </Text>
+        <Text style={styles.mess__body_time}>{item.time}</Text>
+      </View>
+      <View style={styles.mess__icon}>
+        <BankIcon color={"#EFEDF1"} />
+      </View>
+    </View>
+  );
+};
 
 export default function Notifications({ navigation }) {
   const { notifications } = useSelector(({ data }) => data);
@@ -10,25 +27,22 @@ export default function Notifications({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <View style={styles.mess}>
-        <View style={styles.mess__body}>
-          <Text style={styles.mess__body_title}>Центр-инвест</Text>
-          <Text style={styles.mess__body_body}>
-            Ваше обращение №15446 рассмотрено. Категория операции «Ремонт61»
-            изменена с Аквариум на Автозапчасти
-          </Text>
-          <Text style={styles.mess__body_time}>01:66 06.10.2023</Text>
-        </View>
-        <View style={styles.mess__icon}>
-          <BankIcon color={"#EFEDF1"} />
-        </View>
-      </View>
+      <FlatList
+        style={styles.container}
+        data={notifications}
+        renderItem={Item}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(_, i) => i}
+      />
       <BottomNav navigation={navigation} active_sreen="Notifications" />
     </ScreenWrapper>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 66
+  },
   mess: {
     marginTop: 16,
   },

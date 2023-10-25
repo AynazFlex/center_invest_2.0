@@ -1,8 +1,10 @@
 import { View, Pressable, StyleSheet, Text } from "react-native";
 import { Path, Svg } from "react-native-svg";
+import { useSelector } from "react-redux";
 
 const BottomNav = ({ navigation, active_sreen }) => {
   const activeLink = (val) => (active_sreen === val ? "#95F7B9" : "#EFEDF1");
+  const { notifications } = useSelector(({data}) => data)
 
   const handlePress = (str) => navigation.navigate(str);
 
@@ -76,7 +78,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
             strokeLinejoin="round"
           />
         </Svg>
-        <Text style={styles.notif_num}>1</Text>
+        <Text style={styles.notif_num}>{notifications.length}</Text>
       </Pressable>
       <View style={[styles.panel, { right: -16 }]} />
     </View>
