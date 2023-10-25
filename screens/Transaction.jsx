@@ -3,21 +3,7 @@ import ScreenWrapper from "./components/ScreenWrapper";
 import { Path, Svg } from "react-native-svg";
 import CashbackIcon from "./components/CashbackIcon";
 import BankIcon from "./components/BankIcon";
-
-const convertMonth = {
-  0: "января",
-  1: "февраля",
-  2: "марта",
-  3: "апреля",
-  4: "мая",
-  5: "июня",
-  6: "июля",
-  7: "августа",
-  8: "сентября",
-  9: "октября",
-  10: "ноября",
-  11: "декабря",
-};
+import { convertMonth } from "../store/dataReducer";
 
 export default function Transaction({ navigation, route }) {
   const { transaction, bank, account_number } = route.params;

@@ -1,18 +1,27 @@
-import { useEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import useGoHome from "./custom_hooks/useGoHome";
 import ScreenWrapper from "./components/ScreenWrapper";
 import IconWrapper from "./components/IconWrapper";
 import { G, Svg, Polygon, Path } from "react-native-svg";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
 export default function Welcome({ navigation }) {
   useGoHome(navigation);
 
-  useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate("Profile");
-    }, 1000);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      setTimeout(() => {
+        navigation.navigate("Profile");
+      }, 1000);
+    }, [])
+  );
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     navigation.navigate("Profile");
+  //   }, 1000);
+  // }, []);
 
   return (
     <ScreenWrapper>

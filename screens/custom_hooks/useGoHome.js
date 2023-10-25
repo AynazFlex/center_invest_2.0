@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
-export default function useGoHome(navigation, callback) {
+export default function useGoHome(navigation, func) {
   useFocusEffect(
     useCallback(() => {
       const goHome = (e) => {
@@ -15,9 +15,9 @@ export default function useGoHome(navigation, callback) {
           {
             text: "Да",
             style: "destructive",
-            onPress: async () => {
+            onPress: () => {
               navigation.removeListener("beforeRemove", goHome);
-              await callback();
+              func();
             },
           },
         ]);

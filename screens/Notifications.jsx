@@ -2,8 +2,12 @@ import BottomNav from "./components/BottomNav";
 import ScreenWrapper from "./components/ScreenWrapper";
 import { Text, StyleSheet, View } from "react-native";
 import BankIcon from "./components/BankIcon";
+import { useSelector } from "react-redux";
 
 export default function Notifications({ navigation }) {
+  const { notifications } = useSelector(({ data }) => data);
+  console.log(notifications);
+
   return (
     <ScreenWrapper>
       <View style={styles.mess}>

@@ -10,12 +10,17 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getCard, resetError } from "../store/dataReducer";
+import {
+  getCard,
+  resetDone,
+  resetError,
+  setNewCashbacks,
+} from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import { Svg, Path } from "react-native-svg";
 import CashbackIcon from "./components/CashbackIcon";
-import { fetchChooseCardCashBack } from "../store/api";
 import ErrorElem from "./components/ErrorElem";
+import { useEffect } from "react";
 
 const Item = ({ product_type, isChoose, handleChooseCashBack }) => {
   return (
@@ -48,28 +53,13 @@ const Item = ({ product_type, isChoose, handleChooseCashBack }) => {
   );
 };
 
-// const cashbacks = [
-//   "автозапчасти",
-//   "аквариум",
-//   "видеоигры",
-//   "закуски и приправы",
-//   "напитки",
-//   "образование",
-//   "одежда",
-//   "продукты питания",
-//   "уборка",
-//   "электроника",
-// ];
-
 export default function Card({ navigation, route }) {
   const { account_number } = route.params;
-  const { isPending, error_msg, card, access_token, token_type } = useSelector(
+  const { isPending, error_msg, card, isDone } = useSelector(
     ({ data }) => data
   );
-  const [local_error, setError] = useState(null);
   const dispatch = useDispatch();
   const [cash, setCash] = useState([]);
-  const [isLoading, setLoad] = useState(false);
 
   const handleChooseCashBack = (product_type) => {
     if (cash.includes(product_type)) {
@@ -80,15 +70,23 @@ export default function Card({ navigation, route }) {
     setCash((prev) => [...prev, product_type]);
   };
 
-  const isDone = cash.length === 3;
+  const success = cash.length === 3;
 
   useFocusEffect(
     useCallback(() => {
       dispatch(getCard(account_number));
 
-      return () => setCash([]);
+      return () => {
+        setCash([]);
+      };
     }, [])
   );
+
+  useEffect(() => {
+    if (!isDone) return;
+    navigation.goBack();
+    dispatch(resetDone());
+  }, [isDone]);
 
   if (error_msg)
     return (
@@ -101,45 +99,30 @@ export default function Card({ navigation, route }) {
       />
     );
 
-  if (local_error)
-    return (
-      <ErrorElem
-        callback={() => {
-          navigation.goBack();
-          setError(null);
-        }}
-        error_msg={local_error}
-      />
+  if (!card) return <LoadElem />;
+
+  const handlePress = () => {
+    const cashback = card.cashbacks.filter(({ product_type }) =>
+      cash.includes(product_type)
     );
 
-  if (!card || isPending) return <LoadElem />;
-
-  const handlePress = async () => {
-    setLoad(true);
-    try {
-      const cashback = card.cashbacks.filter(({ product_type }) =>
-        cash.includes(product_type)
-      );
-
-      await fetchChooseCardCashBack({
+    dispatch(
+      setNewCashbacks({
         account_number,
-        access_token,
-        token_type,
         cashback,
-      });
-
-      navigation.goBack();
-    } catch ({ response }) {
-      setError(response.data.detail || "Error :/");
-    } finally {
-      setLoad(false);
-    }
+      })
+    );
   };
 
   return (
     <ScreenWrapper>
       <View style={styles.top_nav}>
-        <Pressable onPress={() => navigation.goBack()}>
+        <Pressable
+          onPress={() => {
+            navigation.goBack();
+            dispatch(resetDone());
+          }}
+        >
           <Svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -171,16 +154,16 @@ export default function Card({ navigation, route }) {
         }}
       />
       <Pressable
-        disabled={!isDone || isLoading}
-        style={[styles.done, { opacity: isDone ? 1 : 0.6 }]}
+        disabled={!success || isPending}
+        style={[styles.done, { opacity: success ? 1 : 0.6 }]}
         onPress={handlePress}
       >
-        {isLoading || (
+        {isPending || (
           <Text style={styles.done_text}>
-            {isDone ? "Готово" : `Выберите ${3 - cash.length} кэшбэк(а)`}
+            {success ? "Готово" : `Выберите ${3 - cash.length} кешбэк(а)`}
           </Text>
         )}
-        {isLoading && <ActivityIndicator size={14} color="white" />}
+        {isPending && <ActivityIndicator size={14} color="white" />}
       </Pressable>
     </ScreenWrapper>
   );

@@ -2,40 +2,13 @@ import { useFocusEffect } from "@react-navigation/native";
 import BottomNav from "./components/BottomNav";
 import ScreenWrapper from "./components/ScreenWrapper";
 import { FlatList, Text, View, StyleSheet, Pressable } from "react-native";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTransactions, resetError } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import CashbackIcon from "./components/CashbackIcon";
 import { G, Path, Svg, Circle } from "react-native-svg";
-
-const convertMonth = {
-  0: "января",
-  1: "февраля",
-  2: "марта",
-  3: "апреля",
-  4: "мая",
-  5: "июня",
-  6: "июля",
-  7: "августа",
-  8: "сентября",
-  9: "октября",
-  10: "ноября",
-  11: "декабря",
-};
-
-const colorForCategories = {
-  автозапчасти: "#6B61FD",
-  аквариум: "#63B7FD",
-  напитки: "#FFBF00",
-  уборка: "#FFDB00",
-  одежда: "#B085F7",
-  "закуски и приправы": "#FFAB00",
-  "продукты питания": "#FF5F00",
-  видеоигры: "#78F1B5",
-  образование: "#4FBF29",
-  электроника: "#12DA8D",
-};
+import { colorForCategories, convertMonth } from "../store/dataReducer";
 
 const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
   const radius = chartHeight / 2;
@@ -45,8 +18,8 @@ const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
 
   let startAngle = 0;
 
-  const renderSegments = () => {
-    return data.map((item, index) => {
+  const renderSegments = () =>
+    data.map((item, index) => {
       const percentage = item.value / totalValue;
       categoriesMap.set(item.label, percentage * 100);
       const angle = Math.PI * 2 * percentage;
@@ -67,10 +40,17 @@ const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
 
       return <Path key={index} d={pathData} fill={item.color} />;
     });
-  };
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 10 }}>
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        justifyContent: "center",
+        width: "100%",
+      }}
+    >
       <View style={{ width: chartWidth, height: chartHeight }}>
         <Svg height={chartHeight} width={chartWidth}>
           <Circle
@@ -90,13 +70,14 @@ const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
             <View
               style={{
                 height: 16,
-                width: 32,
+                width: 16,
+                borderRadius: 8,
                 backgroundColor: colorForCategories[label],
               }}
             />
             <CashbackIcon size={16} name={label} />
             <Text style={styles.shopping__statistics_value}>
-              {value.toFixed(1)}%
+              {value.toFixed(1)}% ~ {((totalValue * value) / 100).toFixed(2)}₽
             </Text>
           </View>
         ))}
@@ -105,97 +86,96 @@ const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
   );
 };
 
-const sortByDate = (transactions, k) => {
-  const map = new Map();
-  const mapOfCategories = new Map();
-  const mapForDiagram = new Map();
-  let totalBack = 0;
+// const sortByDate = (transactions, k) => {
+//   const map = new Map();
+//   const mapOfCategories = new Map();
+//   const mapForDiagram = new Map();
+//   let totalBack = 0;
 
-  const converDate = (time) => {
-    const date = new Date(time);
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  };
+//   const converDate = (time) => {
+//     const date = new Date(time);
+//     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+//   };
 
-  transactions.forEach((item) => {
-    const { account_number, bank, transactions } = item;
-    transactions.forEach((transaction) => {
-      const { category, time, value, name } = transaction;
-      const kef = k[bank][category];
-      if (kef) {
-        const date = converDate(time);
-        const back = (kef * value) / 100;
-        totalBack += back;
-        const object = {
-          account_number,
-          bank,
-          transaction: {
-            time,
-            name,
-            value,
-            category,
-            back,
-          },
-        };
+//   transactions.forEach((item) => {
+//     const { account_number, bank, transactions } = item;
+//     transactions.forEach((transaction) => {
+//       const { category, time, value, name } = transaction;
+//       const kef = k[bank][category];
+//       if (kef) {
+//         const date = converDate(time);
+//         const back = (kef * value) / 100;
+//         totalBack += back;
+//         const object = {
+//           account_number,
+//           bank,
+//           transaction: {
+//             time,
+//             name,
+//             value,
+//             category,
+//             back,
+//           },
+//         };
 
-        if (mapForDiagram.has(category)) {
-          mapForDiagram.set(category, mapForDiagram.get(category) + back);
-        } else {
-          mapForDiagram.set(category, back);
-        }
+//         if (mapForDiagram.has(category)) {
+//           mapForDiagram.set(category, mapForDiagram.get(category) + back);
+//         } else {
+//           mapForDiagram.set(category, back);
+//         }
 
-        if (mapOfCategories.has(category)) {
-          mapOfCategories.set(category, mapOfCategories.get(category) + 1);
-        } else {
-          mapOfCategories.set(category, 1);
-        }
+//         if (mapOfCategories.has(category)) {
+//           mapOfCategories.set(category, mapOfCategories.get(category) + 1);
+//         } else {
+//           mapOfCategories.set(category, 1);
+//         }
 
-        if (map.has(date)) {
-          map.set(date, [...map.get(date), object]);
-        } else {
-          map.set(date, [object]);
-        }
-      }
-    });
-  });
+//         if (map.has(date)) {
+//           map.set(date, [...map.get(date), object]);
+//         } else {
+//           map.set(date, [object]);
+//         }
+//       }
+//     });
+//   });
 
-  const maxCategories = () => {
-    const arr = [...mapOfCategories];
-    console.log(arr);
-    return arr.reduce(
-      (obj, i) =>
-        i[1] > obj.total
-          ? {
-              category: i[0],
-              total: i[1],
-            }
-          : obj,
-      {
-        category: arr[0][0],
-        total: arr[0][1],
-      }
-    );
-  };
+//   const maxCategories = () => {
+//     const arr = [...mapOfCategories];
+//     console.log(arr);
+//     return arr.reduce(
+//       (obj, i) =>
+//         i[1] > obj.total
+//           ? {
+//               category: i[0],
+//               total: i[1],
+//             }
+//           : obj,
+//       {
+//         category: arr[0][0],
+//         total: arr[0][1],
+//       }
+//     );
+//   };
 
-  return {
-    data: [...map].sort((a, b) => new Date(b[0]) - new Date(a[0])),
-    totalBack,
-    mostPopularCategories: maxCategories().category,
-    diagram: [...mapForDiagram].reduce(
-      (res, [label, value]) => [
-        ...res,
-        {
-          label,
-          value,
-          color: colorForCategories[label],
-        },
-      ],
-      []
-    ),
-  };
-};
+//   return {
+//     data: [...map].sort((a, b) => new Date(b[0]) - new Date(a[0])),
+//     totalBack,
+//     mostPopularCategories: maxCategories().category,
+//     diagram: [...mapForDiagram].reduce(
+//       (res, [label, value]) => [
+//         ...res,
+//         {
+//           label,
+//           value,
+//           color: colorForCategories[label],
+//         },
+//       ],
+//       []
+//     ),
+//   };
+// };
 
 const Item = ({ item, navigation }) => {
-  console.log(item);
   const date = new Date(item[0]);
   const converDate = `${date.getDate()} ${
     convertMonth[date.getMonth()]
@@ -243,15 +223,17 @@ const Item = ({ item, navigation }) => {
 };
 
 export default function Statistics({ navigation }) {
-  const { isPending, error_msg, transactions, k } = useSelector(
+  const { error_msg, transactions, k, statistics } = useSelector(
     ({ data }) => data
   );
   const dispatch = useDispatch();
+  const [category, setCategory] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getTransactions());
-    }, [])
+      console.log("focus");
+      transactions || dispatch(getTransactions());
+    }, [transactions])
   );
 
   if (error_msg)
@@ -265,16 +247,11 @@ export default function Statistics({ navigation }) {
       />
     );
 
-  if (!transactions || isPending) {
+  if (!transactions) {
     return <LoadElem />;
   }
 
-  const { data, totalBack, mostPopularCategories, diagram } = sortByDate(
-    transactions,
-    k
-  );
-
-  console.log(diagram);
+  const { data, totalBack, mostPopularCategories, diagram } = statistics;
 
   return (
     <ScreenWrapper>
@@ -322,16 +299,25 @@ export default function Statistics({ navigation }) {
             </Text>
           </View>
           <Text style={styles.shopping__statistics_text}>
-            Самая опулярная категория
+            Самая популярная категория
           </Text>
         </View>
       </View>
-      <View style={[styles.shopping__statistics_wrapper, { marginTop: 16 }]}>
+      <View style={[styles.shopping__statistics_wrapper, { marginTop: 8 }]}>
         <View style={styles.shopping__catigories}>
           {diagram.map(({ label }) => (
-            <View key={label} style={styles.shopping__statistics_category}>
+            <Pressable
+              onPress={() => {
+                setCategory((prev) => (prev === label ? null : label));
+              }}
+              key={label}
+              style={[
+                styles.shopping__statistics_category,
+                { borderColor: category === label ? "black" : "#FAF9FD" },
+              ]}
+            >
               <CashbackIcon size={16} name={label} />
-            </View>
+            </Pressable>
           ))}
         </View>
         <Text style={styles.shopping__statistics_text}>Категории</Text>
@@ -339,7 +325,18 @@ export default function Statistics({ navigation }) {
       <FlatList
         style={styles.shopping}
         showsVerticalScrollIndicator={false}
-        data={data}
+        data={
+          category
+            ? data.reduce((arr, [date, second]) => {
+                const filter_by_category = second.filter(
+                  ({ transaction }) => transaction.category === category
+                );
+                if (filter_by_category.length)
+                  arr.push([date, filter_by_category]);
+                return arr;
+              }, [])
+            : data
+        }
         renderItem={({ item }) => <Item item={item} navigation={navigation} />}
         keyExtractor={(item) => item[0]}
       />
@@ -431,8 +428,8 @@ const styles = StyleSheet.create({
 
   shopping__statistics: {
     flexDirection: "row",
-    gap: 16,
-    marginTop: 16,
+    gap: 8,
+    marginTop: 8,
   },
 
   shopping__statistics_total: {
@@ -462,8 +459,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderColor: "#FAF9FD",
     backgroundColor: "#FAF9FD",
     borderRadius: 16,
     marginBottom: 8,

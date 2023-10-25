@@ -10,14 +10,13 @@ import ScreenWrapper from "./components/ScreenWrapper";
 import useGoHome from "./custom_hooks/useGoHome";
 import BottomNav from "./components/BottomNav";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { getCards, setLogout } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import CashbackIcon from "./components/CashbackIcon";
 import BankIcon from "./components/BankIcon";
 import ErrorElem from "./components/ErrorElem";
-import { fetchLogout } from "../store/api";
 
 const Item = ({ item, navigation }) => (
   <View style={styles.card__wrapper}>
@@ -71,43 +70,27 @@ const Item = ({ item, navigation }) => (
 );
 
 export default function Profile({ navigation }) {
-  const { cards, error_msg, isPending, access_token, token_type } = useSelector(
-    ({ data }) => data
-  );
-  const [local_error, setError] = useState(null);
+  const { cards, error_msg, isAuth } = useSelector(({ data }) => data);
   const dispatch = useDispatch();
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getCards());
-    }, [])
+      cards || (isAuth && dispatch(getCards()));
+    }, [cards, isAuth])
   );
 
-  const logout = async () => {
-    try {
-      await fetchLogout({ access_token, token_type });
-      dispatch(setLogout());
-      navigation.push("Home");
-    } catch ({ response }) {
-      setError(response.data.detail || "Error :/");
-    }
-  };
+  useEffect(() => {
+    isAuth || navigation.push("Home");
+  }, [isAuth]);
 
-  useGoHome(navigation, logout);
+  useGoHome(navigation, () => dispatch(setLogout()));
 
-  if (local_error)
+  if (error_msg)
     return (
-      <ErrorElem
-        callback={() => {
-          setError(null);
-        }}
-        error_msg={local_error}
-      />
+      <ErrorElem callback={() => dispatch(setLogout())} error_msg={error_msg} />
     );
 
-  if (error_msg) return <ErrorElem callback={logout} error_msg={error_msg} />;
-
-  if (!cards || isPending) {
+  if (!cards) {
     return <LoadElem />;
   }
 

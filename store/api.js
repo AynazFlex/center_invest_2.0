@@ -4,14 +4,16 @@ const instance = axios.create({
   baseURL: "https://fp.centrinvest.ru/api/v1",
 });
 
+const setHeaders = ({ token_type, access_token }) => ({
+  headers: {
+    Authorization: `${token_type} ${access_token}`,
+  },
+});
+
 const getWrapper =
   (url) =>
   async ({ access_token, token_type }) =>
-    await instance.get(url, {
-      headers: {
-        Authorization: `${token_type} ${access_token}`,
-      },
-    });
+    await instance.get(url, { ...setHeaders({ access_token, token_type }) });
 
 export const fetchAuth = async ({ username, password }) =>
   await instance.post(
@@ -32,11 +34,7 @@ export const fetchCards = getWrapper("/cards");
 export const fetchCard = async ({ account_number, access_token, token_type }) =>
   await instance.get(
     `/get_cashback_for_choose/?account_number=${account_number}`,
-    {
-      headers: {
-        Authorization: `${token_type} ${access_token}`,
-      },
-    }
+    { ...setHeaders({ access_token, token_type }) }
   );
 
 export const fetchChooseCardCashBack = async ({
@@ -57,24 +55,10 @@ export const fetchChooseCardCashBack = async ({
       month,
       cashback,
     },
-    {
-      headers: {
-        Authorization: `${token_type} ${access_token}`,
-      },
-    }
+    { ...setHeaders({ access_token, token_type }) }
   );
 };
 
-export const fetchGetTransactions = async ({ access_token, token_type }) =>
-  await instance.get("/transactions/", {
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-    },
-  });
+export const fetchGetTransactions = getWrapper("/transactions/");
 
-export const fetchLogout = async ({ access_token, token_type }) =>
-  await instance.get("/log_out/", {
-    headers: {
-      Authorization: `${token_type} ${access_token}`,
-    },
-  });
+export const fetchLogout = getWrapper("/log_out/");

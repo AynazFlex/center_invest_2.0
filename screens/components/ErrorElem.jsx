@@ -18,6 +18,7 @@ export default function ErrorElem({ callback, error_msg }) {
 const styles = StyleSheet.create({
   error: {
     flex: 1,
+    backgroundColor: "white",
   },
   error__text: {
     fontSize: 14,
