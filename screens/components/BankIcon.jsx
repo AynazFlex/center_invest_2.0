@@ -1,20 +1,21 @@
 import { View } from "react-native";
 import { Svg, Path } from "react-native-svg";
+import vw from "../../assets/functions/vw";
 
 const BankIcon = ({ color }) => (
   <View
     style={{
-      padding: 8,
+      padding: vw(8),
       backgroundColor: `${color || "#FAF9FD"}`,
-      width: 36,
-      height: 36,
-      borderRadius: 18,
+      width: vw(36),
+      height: vw(36),
+      borderRadius: vw(18),
     }}
   >
     <Svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width={vw(20)}
+      height={vw(20)}
       viewBox="0 0 20 20"
       fill="none"
     >

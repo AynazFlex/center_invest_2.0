@@ -36,7 +36,7 @@ export const colorForCategories = {
   электроника: "#12DA8D",
 };
 
-const formater = (arg) => arg < 10 ? `0${arg}` : arg
+const formater = (arg) => (arg < 10 ? `0${arg}` : arg);
 
 const setStatistics = (transactions, k) => {
   const map = new Map();
@@ -51,6 +51,8 @@ const setStatistics = (transactions, k) => {
 
   transactions.forEach((item) => {
     const { account_number, bank, transactions } = item;
+    console.log(transactions);
+
     transactions.forEach((transaction) => {
       const { category, time, value, name } = transaction;
       const kef = k[bank][category];
@@ -102,8 +104,8 @@ const setStatistics = (transactions, k) => {
             }
           : obj,
       {
-        category: arr[0][0],
-        total: arr[0][1],
+        category: "",
+        total: 0,
       }
     );
   };
@@ -171,7 +173,12 @@ export const getTransactions = createAsyncThunk(
     try {
       const { access_token, token_type } = thunkAPI.getState().data;
       const { data } = await fetchGetTransactions({ access_token, token_type });
-      return data;
+      const mount = data.reduce(
+        (m, { transactions }) => transactions.length + m,
+        0
+      );
+      if (mount) return data;
+      return thunkAPI.rejectWithValue("У вас еще не было транзакций");
     } catch ({ response }) {
       return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
     }
@@ -235,7 +242,7 @@ const initialState = {
       title: "Центр-инвест",
       body: "Ваше обращение №15446 рассмотрено. Категория операции «Ремонт61» изменена с Аквариум на Автозапчасти",
       time: "01:56 06.10.2023",
-    }
+    },
   ],
 };
 
@@ -302,16 +309,25 @@ const dataSlice = createSlice({
     });
     builder.addCase(setLogout.pending, pending);
     builder.addCase(setLogout.rejected, rejected);
-    builder.addCase(setNewCashbacks.fulfilled, (state, {payload}) => {
+    builder.addCase(setNewCashbacks.fulfilled, (state, { payload }) => {
       state.isPending = false;
       state.isDone = true;
 
       const date = new Date();
       state.notifications.push({
         title: "Центр-инвест",
-        body: `Ваше обращение №${Math.floor(Math.random()*2000 + 1000)} рассмотрено. Вы выбрали кешбэки${payload.reduce((str, {product_type}) => `${str} ${product_type},`, "")}`,
-        time: `${formater(date.getHours())}:${formater(date.getMinutes())} ${formater(date.getDate())}.${formater(date.getMonth() + 1)}.${date.getFullYear()}`,
-      })
+        body: `Ваше обращение №${Math.floor(
+          Math.random() * 2000 + 1000
+        )} рассмотрено. Вы выбрали кешбэки${payload.reduce(
+          (str, { product_type }) => `${str} ${product_type},`,
+          ""
+        )}`,
+        time: `${formater(date.getHours())}:${formater(
+          date.getMinutes()
+        )} ${formater(date.getDate())}.${formater(
+          date.getMonth() + 1
+        )}.${date.getFullYear()}`,
+      });
     });
     builder.addCase(setNewCashbacks.pending, pending);
     builder.addCase(setNewCashbacks.rejected, rejected);

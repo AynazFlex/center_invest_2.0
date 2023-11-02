@@ -10,10 +10,28 @@ import store from "./store/store";
 import Notifications from "./screens/Notifications";
 import Card from "./screens/Card";
 import Transaction from "./screens/Transaction";
+import * as Font from "expo-font";
+import { useEffect } from "react";
+import { useState } from "react";
+import LoadElem from "./screens/components/LoadElem";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [isLoad, setLoad] = useState(true);
+  useEffect(() => {
+    const fontsLoadAsync = async () => {
+      await Font.loadAsync({
+        "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+        "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+      });
+    };
+
+    fontsLoadAsync().finally(() => setLoad(false));
+  }, []);
+
+  if (isLoad) return <LoadElem />;
+
   return (
     <Provider store={store}>
       <NavigationContainer>

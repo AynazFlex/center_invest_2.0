@@ -1,5 +1,6 @@
 import ModalWrapper from "./ModalWrapper";
 import { View, Text, Pressable, StyleSheet, StatusBar } from "react-native";
+import font from "../../assets/functions/font";
 
 export default function ErrorElem({ callback, error_msg }) {
   return (
@@ -21,17 +22,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   error__text: {
-    fontSize: 14,
-    fontWeight: "400",
-    color: "#44474F",
+    ...font(14, "400", "#44474F"),
     marginBottom: 24,
   },
   error__press: {
     marginLeft: "auto",
   },
   error__press_text: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#006E0D",
+    ...font(14, "500", "#006E0D"),
   },
 });

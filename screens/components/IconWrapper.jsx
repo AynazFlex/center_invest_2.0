@@ -1,4 +1,5 @@
 import { View, StyleSheet } from "react-native";
+import vw from "../../assets/functions/vw";
 
 export default function IconWrapper({ children }) {
   return <View style={styles.container}>{children}</View>;
@@ -7,9 +8,9 @@ export default function IconWrapper({ children }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    borderRadius: 50,
-    width: 50,
-    height: 50,
+    borderRadius: vw(50),
+    width: vw(50),
+    height: vw(50),
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#3cb93f",

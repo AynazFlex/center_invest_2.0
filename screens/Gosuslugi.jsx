@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuth } from "../store/dataReducer";
+import vw from "../assets/functions/vw";
+import font from "../assets/functions/font";
 
 export default function Gosuslugi({ navigation }) {
   const [login, setLogin] = useState("");
@@ -72,12 +74,12 @@ export default function Gosuslugi({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={[styles.title__1_step, styles.title__all]}>РОС</Text>
-        <Text style={[styles.title__2_step, styles.title__all]}>УСЛУГИ</Text>
+        <Text style={[styles.title__all, styles.title__1_step]}>РОС</Text>
+        <Text style={[styles.title__all, styles.title__2_step]}>УСЛУГИ</Text>
       </View>
 
       <View style={inputStyles(log_valid)}>
-        <Text style={[styles.wrapper__label, styles.font]}>
+        <Text style={[styles.font, styles.wrapper__label]}>
           Телефон / Email / СНИЛС
         </Text>
         <TextInput
@@ -92,7 +94,7 @@ export default function Gosuslugi({ navigation }) {
         />
       </View>
       <View style={inputStyles(pass_valid)}>
-        <Text style={[styles.wrapper__label, styles.font]}>Пароль</Text>
+        <Text style={[styles.font, styles.wrapper__label]}>Пароль</Text>
         <TextInput
           onBlur={() => password || setPass_valid(false)}
           onFocus={() => pass_valid || setPass_valid(true)}
@@ -114,9 +116,9 @@ export default function Gosuslugi({ navigation }) {
         ]}
       >
         {isPending ? (
-          <ActivityIndicator size={16} color="white" />
+          <ActivityIndicator size={vw(16)} color="white" />
         ) : (
-          <Text style={[styles.enter__text, styles.font]}>Войти</Text>
+          <Text style={[styles.font, styles.enter__text]}>Войти</Text>
         )}
       </Pressable>
       <StatusBar style="auto" />
@@ -138,8 +140,7 @@ const styles = StyleSheet.create({
   },
 
   title__all: {
-    fontSize: 24,
-    fontWeight: "bold",
+    ...font(24, "500"),
   },
 
   title__1_step: {
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
   wrapper__all: {
     borderRadius: 10,
     paddingVertical: 10,
-    width: 300,
+    width: vw(300),
   },
 
   wrapper__border: {
@@ -180,8 +181,7 @@ const styles = StyleSheet.create({
   },
 
   font: {
-    fontSize: 14,
-    fontWeight: "500",
+    ...font(14, "500"),
   },
 
   wrapper__label: {

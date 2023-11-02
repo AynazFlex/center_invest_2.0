@@ -17,6 +17,9 @@ import LoadElem from "./components/LoadElem";
 import CashbackIcon from "./components/CashbackIcon";
 import BankIcon from "./components/BankIcon";
 import ErrorElem from "./components/ErrorElem";
+import vw from "../assets/functions/vw";
+import font from "../assets/functions/font";
+import border from "../assets/functions/border";
 
 const Item = ({ item, navigation }) => (
   <View style={styles.card__wrapper}>
@@ -27,9 +30,9 @@ const Item = ({ item, navigation }) => (
         <View
           style={{
             backgroundColor: "#FAF9FD",
-            width: 36,
-            height: 36,
-            borderRadius: 18,
+            width: vw(36),
+            height: vw(36),
+            borderRadius: vw(18),
           }}
         ></View>
       )}
@@ -44,7 +47,7 @@ const Item = ({ item, navigation }) => (
       <View style={styles.card__cashbacks}>
         {item.cashbacks.map(({ product_type, value }) => (
           <View key={product_type} style={styles.card__cashback_item}>
-            <CashbackIcon size={16} name={product_type} />
+            <CashbackIcon size={vw(16)} name={product_type} />
             <Text style={styles.card__cashback_title}>
               {product_type} {value}%
             </Text>
@@ -98,15 +101,13 @@ export default function Profile({ navigation }) {
     <ScreenWrapper>
       <View style={styles.header}>
         <Image
-          width={48}
-          height={48}
+          width={vw(48)}
+          height={vw(48)}
           style={styles.header__img}
           source={require("../assets/image/user_icon.png")}
         />
         <View style={styles.header__info}>
-          <Pressable onPress={() => dispatch(setLogout())}>
           <Text style={styles.header__user_name}>Александр</Text>
-          </Pressable>
         </View>
       </View>
       <Text style={styles.accounts}>Счета</Text>
@@ -133,25 +134,17 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
 
-  header__info: {},
-
   header__user_name: {
-    fontSize: 24,
-    fontWeight: "400",
-    color: "#1B1B1F",
+    ...font(24, "400", "#1B1B1F"),
   },
 
   header__user_cashback: {
-    fontSize: 14,
-    fontWeight: "400",
-    color: "#44474F",
+    ...font(14, "400", "#44474F"),
   },
 
   accounts: {
     marginTop: 32,
-    fontSize: 22,
-    fontWeight: "400",
-    color: "#1B1B1F",
+    ...font(22, "400", "#1B1B1F"),
     marginBottom: 16,
   },
   nav: {
@@ -160,7 +153,7 @@ const styles = StyleSheet.create({
   },
 
   cards_list: {
-    marginBottom: 66,
+    marginBottom: vw(32) + 32,
   },
 
   card__wrapper: {
@@ -177,16 +170,7 @@ const styles = StyleSheet.create({
   },
 
   card__bank: {
-    color: "#1B1B1F",
-    fontSize: 16,
-    fontWeight: "500",
-  },
-
-  card__no: {
-    fontSize: 12,
-    lineHeight: 12,
-    fontWeight: "400",
-    color: "#44474F",
+    ...font(16, "500", "#1B1B1F"),
   },
 
   card__cashbacks: {
@@ -206,28 +190,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#FAF9FD",
     flexWrap: "nowrap",
   },
+  card__no: {
+    ...font(12, "400", "#44474F"),
+  },
 
   card__cashback_title: {
-    fontSize: 12,
-    fontWeight: "400",
-    color: "#44474F",
+    ...font(12, "400", "#44474F"),
   },
 
   card__button: {
     marginTop: 12,
+    ...border(1, "solid", "#75777F"),
     borderRadius: 8,
-    borderColor: "#75777F",
-    borderStyle: "solid",
-    borderWidth: 1,
-    height: 32,
+    height: vw(32),
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
 
   card__button_text: {
-    fontSize: 12,
-    fontWeight: "500",
-    color: "#1B1B1F",
+    ...font(12, "500", "#1B1B1F"),
   },
 });

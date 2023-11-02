@@ -4,6 +4,8 @@ import { Path, Svg } from "react-native-svg";
 import CashbackIcon from "./components/CashbackIcon";
 import BankIcon from "./components/BankIcon";
 import { convertMonth } from "../store/dataReducer";
+import vw from "../assets/functions/vw";
+import font from "../assets/functions/font";
 
 export default function Transaction({ navigation, route }) {
   const { transaction, bank, account_number } = route.params;
@@ -18,8 +20,8 @@ export default function Transaction({ navigation, route }) {
         <Pressable onPress={() => navigation.goBack()}>
           <Svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width={vw(24)}
+            height={vw(24)}
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -33,7 +35,7 @@ export default function Transaction({ navigation, route }) {
       </View>
       <View style={styles.main}>
         <View style={styles.main__category_icon}>
-          <CashbackIcon size={24} name={transaction.category} />
+          <CashbackIcon size={vw(24)} name={transaction.category} />
         </View>
         <Text style={styles.main__name}>{transaction.name}</Text>
         <Text style={styles.main__category}>{transaction.category}</Text>
@@ -50,8 +52,8 @@ export default function Transaction({ navigation, route }) {
           <View
             style={{
               backgroundColor: "#FAF9FD",
-              width: 36,
-              height: 36,
+              width: vw(36),
+              height: vw(36),
               borderRadius: 18,
             }}
           ></View>
@@ -74,10 +76,7 @@ const styles = StyleSheet.create({
   },
 
   nav__time: {
-    color: "#1B1B1F",
-    fontSize: 16,
-    lineHeight: 16,
-    fontWeight: "400",
+    ...font(16, "400", "#1B1B1F"),
   },
 
   main: {
@@ -94,16 +93,12 @@ const styles = StyleSheet.create({
   },
 
   main__name: {
-    fontSize: 22,
-    color: "#1B1B1F",
-    fontWeight: "400",
+    ...font(22, "400", "#1B1B1F"),
     textAlign: "center",
   },
 
   main__category: {
-    fontSize: 12,
-    color: "#44474F",
-    fontWeight: "400",
+    ...font(12, "400", "#44474F"),
   },
 
   main__total: {
@@ -114,15 +109,11 @@ const styles = StyleSheet.create({
   },
 
   main__value: {
-    fontSize: 32,
-    fontWeight: "400",
-    color: "#1B1B1F",
+    ...font(32, "400", "#1B1B1F"),
   },
 
   main__back: {
-    fontSize: 12,
-    fontWeight: "500",
-    color: "#201C00",
+    ...font(12, "500", "#201C00"),
     backgroundColor: "#FBE505",
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -130,9 +121,7 @@ const styles = StyleSheet.create({
   },
 
   chak: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#44474F",
+    ...font(14, "500", "#44474F"),
     marginBottom: 8,
   },
 
@@ -146,14 +135,10 @@ const styles = StyleSheet.create({
   },
 
   bank__name: {
-    fontSize: 14,
-    color: "#1B1B1F",
-    fontWeight: "500",
+    ...font(14, "500", "#1B1B1F"),
   },
 
   bank__number: {
-    fontSize: 12,
-    fontWeight: "400",
-    color: "#44474F",
+    ...font(12, "400", "#44474F"),
   },
 });

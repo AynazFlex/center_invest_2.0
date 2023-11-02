@@ -3,15 +3,15 @@ import ScreenWrapper from "./components/ScreenWrapper";
 import { Text, StyleSheet, View, FlatList } from "react-native";
 import BankIcon from "./components/BankIcon";
 import { useSelector } from "react-redux";
+import vw from "../assets/functions/vw";
+import font from "../assets/functions/font";
 
-const Item = ({item}) => {
+const Item = ({ item }) => {
   return (
     <View style={styles.mess}>
       <View style={styles.mess__body}>
         <Text style={styles.mess__body_title}>{item.title}</Text>
-        <Text style={styles.mess__body_body}>
-          {item.body}
-        </Text>
+        <Text style={styles.mess__body_body}>{item.body}</Text>
         <Text style={styles.mess__body_time}>{item.time}</Text>
       </View>
       <View style={styles.mess__icon}>
@@ -23,7 +23,6 @@ const Item = ({item}) => {
 
 export default function Notifications({ navigation }) {
   const { notifications } = useSelector(({ data }) => data);
-  console.log(notifications);
 
   return (
     <ScreenWrapper>
@@ -41,7 +40,7 @@ export default function Notifications({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 66
+    marginBottom: vw(32) + 32,
   },
   mess: {
     marginTop: 16,
@@ -53,27 +52,21 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderBottomLeftRadius: 12,
     backgroundColor: "#EFEDF1",
-    marginRight: 44,
+    marginRight: vw(44),
   },
 
   mess__body_title: {
-    fontSize: 12,
-    color: "#44474F",
-    fontWeight: "500",
+    ...font(12, "500", "#44474F"),
     marginBottom: 8,
   },
 
   mess__body_body: {
-    fontSize: 12,
-    color: "#44474F",
-    fontWeight: "400",
+    ...font(12, "400", "#44474F"),
     marginBottom: 8,
   },
 
   mess__body_time: {
-    fontSize: 12,
-    color: "#44474F",
-    fontWeight: "400",
+    ...font(12, "400", "#44474F"),
     textAlign: "right",
   },
 

@@ -1,11 +1,12 @@
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import ScreenWrapper from "./ScreenWrapper";
+import vw from "../../assets/functions/vw";
 
 export default function LoadElem() {
   return (
     <ScreenWrapper>
       <View style={styles.container}>
-        <ActivityIndicator size={50} color="#95F7B9" />
+        <ActivityIndicator size={vw(50)} color="#95F7B9" />
       </View>
     </ScreenWrapper>
   );

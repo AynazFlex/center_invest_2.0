@@ -21,6 +21,8 @@ import { Svg, Path } from "react-native-svg";
 import CashbackIcon from "./components/CashbackIcon";
 import ErrorElem from "./components/ErrorElem";
 import { useEffect } from "react";
+import vw from "../assets/functions/vw";
+import font from "../assets/functions/font";
 
 const Item = ({ product_type, isChoose, handleChooseCashBack }) => {
   return (
@@ -29,15 +31,15 @@ const Item = ({ product_type, isChoose, handleChooseCashBack }) => {
       onPress={() => handleChooseCashBack(product_type)}
     >
       <View style={styles.cashbacks_item_icon_wrapper}>
-        <CashbackIcon size={24} name={product_type} />
+        <CashbackIcon size={vw(24)} name={product_type} />
       </View>
       <Text style={styles.cashbacks_item_text}>{product_type}</Text>
       {isChoose && (
         <View style={styles.cashbacks_item_check}>
           <Svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width={vw(20)}
+            height={vw(20)}
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -125,8 +127,8 @@ export default function Card({ navigation, route }) {
         >
           <Svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width={vw(20)}
+            height={vw(20)}
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -163,7 +165,7 @@ export default function Card({ navigation, route }) {
             {success ? "Готово" : `Выберите ${3 - cash.length} кешбэк(а)`}
           </Text>
         )}
-        {isPending && <ActivityIndicator size={14} color="white" />}
+        {isPending && <ActivityIndicator size={vw(14)} color="white" />}
       </Pressable>
     </ScreenWrapper>
   );
@@ -177,9 +179,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   top_nav_text: {
-    fontSize: 16,
-    fontWeight: "400",
-    color: "#1B1B1F",
+    ...font(16, "400", "#1B1B1F"),
   },
   cashbacks_list: {
     marginTop: 16,
@@ -194,9 +194,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   cashbacks_item_text: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#1B1B1F",
+    ...font(16, "500", "#1B1B1F"),
   },
   cashbacks_item_check: {
     marginLeft: "auto",
@@ -204,8 +202,8 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   cashbacks_item_no_check: {
-    width: 20,
-    height: 20,
+    width: vw(20),
+    height: vw(20),
     borderColor: "#44474F",
     borderRadius: 2,
     borderStyle: "solid",
@@ -213,7 +211,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
   },
   done: {
-    height: 40,
+    height: vw(40),
     borderRadius: 10,
     backgroundColor: "#006E0D",
     alignItems: "center",
@@ -222,8 +220,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   done_text: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#FFF",
+    ...font(14, "500", "#FFF"),
   },
 });

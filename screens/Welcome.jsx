@@ -5,6 +5,8 @@ import IconWrapper from "./components/IconWrapper";
 import { G, Svg, Polygon, Path } from "react-native-svg";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
+import vw from "../assets/functions/vw";
+import font from "../assets/functions/font";
 
 export default function Welcome({ navigation }) {
   useGoHome(navigation);
@@ -17,19 +19,13 @@ export default function Welcome({ navigation }) {
     }, [])
   );
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     navigation.navigate("Profile");
-  //   }, 1000);
-  // }, []);
-
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         <IconWrapper>
           <Svg
-            width="34px"
-            height="23px"
+            width={vw(34)}
+            height={vw(23)}
             viewBox="0 0 24 13"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -65,8 +61,6 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 24,
-    fontWeight: "400",
-    color: "#1B1B1F",
+    ...font(24, "400", "#1B1B1F"),
   },
 });

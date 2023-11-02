@@ -31,6 +31,14 @@
       "eas": {
         "projectId": "9171ed95-6886-4074-b519-be570597ef94"
       }
-    }
+    },
+    "plugins": [
+      [
+        "./plugins/withAndroidMainActivityAttributes",
+        {
+          "android:usesCleartextTraffic": true
+        }
+      ]
+    ]
   }
 }

@@ -10,6 +10,9 @@ import {
   LinearGradient,
   Stop,
 } from "react-native-svg";
+import vw from "../assets/functions/vw";
+import font from "../assets/functions/font";
+import border from "../assets/functions/border";
 
 export default function Home({ navigation }) {
   return (
@@ -18,8 +21,8 @@ export default function Home({ navigation }) {
         <View style={styles.center_invest_label}>
           <Svg
             xmlns="http://www.w3.org/2000/svg"
-            width="152"
-            height="32"
+            width={vw(152)}
+            height={vw(32)}
             viewBox="0 0 152 32"
             fill="none"
           >
@@ -103,8 +106,8 @@ export default function Home({ navigation }) {
         >
           <Svg
             xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
+            width={vw(18)}
+            height={vw(18)}
             viewBox="0 0 18 18"
             fill="none"
           >
@@ -158,38 +161,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     borderRadius: 10,
-    borderColor: "#75777F",
-    borderStyle: "solid",
-    borderWidth: 1,
-    height: 52,
+    ...border(1, "solid", "#75777F"),
   },
 
   button__text: {
-    color: "#1B1B1F",
-    fontSize: 14,
-    fontWeight: "500",
+    ...font(14, "500", "#1B1B1F"),
   },
 
   center_invest_label: {
     position: "absolute",
     top: 32,
     left: "50%",
-    right: "50%",
-    width: 152,
-    transform: [{ translateX: -76 }],
+    width: vw(152),
+    transform: [{ translateX: -1 * vw(76) }],
   },
 
   title: {
-    fontSize: 24,
-    fontWeight: "400",
-    color: "#1B1B1F",
+    ...font(24, "400", "#1B1B1F"),
     marginBottom: 8,
   },
 
   subtitle: {
-    fontSize: 14,
-    fontWeight: "400",
-    color: "#1B1B1F",
+    ...font(14, "400", "#1B1B1F"),
     marginBottom: 24,
     textAlign: "center",
   },

@@ -1,10 +1,12 @@
 import { View, Pressable, StyleSheet, Text } from "react-native";
 import { Path, Svg } from "react-native-svg";
 import { useSelector } from "react-redux";
+import vw from "../../assets/functions/vw";
+import font from "../../assets/functions/font";
 
 const BottomNav = ({ navigation, active_sreen }) => {
   const activeLink = (val) => (active_sreen === val ? "#95F7B9" : "#EFEDF1");
-  const { notifications } = useSelector(({data}) => data)
+  const { notifications } = useSelector(({ data }) => data);
 
   const handlePress = (str) => navigation.navigate(str);
 
@@ -17,8 +19,8 @@ const BottomNav = ({ navigation, active_sreen }) => {
       >
         <Svg
           xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="24"
+          width={vw(25)}
+          height={vw(24)}
           viewBox="0 0 25 24"
           fill="none"
         >
@@ -38,8 +40,8 @@ const BottomNav = ({ navigation, active_sreen }) => {
       >
         <Svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width={vw(24)}
+          height={vw(24)}
           viewBox="0 0 24 24"
           fill="none"
         >
@@ -64,8 +66,8 @@ const BottomNav = ({ navigation, active_sreen }) => {
       >
         <Svg
           xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="24"
+          width={vw(25)}
+          height={vw(24)}
           viewBox="0 0 25 24"
           fill="none"
         >
@@ -78,7 +80,9 @@ const BottomNav = ({ navigation, active_sreen }) => {
             strokeLinejoin="round"
           />
         </Svg>
-        <Text style={styles.notif_num}>{notifications.length}</Text>
+        <View style={styles.notif_num}>
+          <Text style={styles.notif_num_text}>{notifications.length}</Text>
+        </View>
       </Pressable>
       <View style={[styles.panel, { right: -16 }]} />
     </View>
@@ -100,7 +104,7 @@ const styles = StyleSheet.create({
   },
   panel: {
     width: 16,
-    height: 64,
+    height: vw(32) + 32,
     position: "absolute",
     top: 0,
     backgroundColor: "#EFEDF1",
@@ -109,23 +113,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: 64,
-    height: 32,
-    borderRadius: 16,
+    width: vw(64),
+    height: vw(32),
+    borderRadius: vw(16),
   },
   notif_num: {
     position: "absolute",
     left: "50%",
     top: 2,
-    textAlign: "center",
-    verticalAlign: "middle",
-    width: 16,
-    height: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    width: vw(16),
+    height: vw(16),
     backgroundColor: "#BA1A1A",
-    fontSize: 11,
-    fontWeight: "500",
-    color: "#FFF",
-    borderRadius: 8,
+    borderRadius: vw(8),
+  },
+  notif_num_text: {
+    ...font(11, "500", "#FFF"),
   },
 });
 

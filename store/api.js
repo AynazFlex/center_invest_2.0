@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://fp.centrinvest.ru/api/v1",
+  baseURL: "http://86.110.175.202/api/v1",
 });
 
 const setHeaders = ({ token_type, access_token }) => ({

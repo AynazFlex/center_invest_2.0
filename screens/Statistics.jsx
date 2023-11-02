@@ -2,13 +2,17 @@ import { useFocusEffect } from "@react-navigation/native";
 import BottomNav from "./components/BottomNav";
 import ScreenWrapper from "./components/ScreenWrapper";
 import { FlatList, Text, View, StyleSheet, Pressable } from "react-native";
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTransactions, resetError } from "../store/dataReducer";
 import LoadElem from "./components/LoadElem";
 import CashbackIcon from "./components/CashbackIcon";
 import { G, Path, Svg, Circle } from "react-native-svg";
 import { colorForCategories, convertMonth } from "../store/dataReducer";
+import vw from "../assets/functions/vw";
+import ErrorElem from "./components/ErrorElem";
+import font from "../assets/functions/font";
+import border from "../assets/functions/border";
 
 const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
   const radius = chartHeight / 2;
@@ -69,13 +73,13 @@ const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
           <View key={label} style={styles.shopping__statistics_category}>
             <View
               style={{
-                height: 16,
-                width: 16,
+                height: vw(16),
+                width: vw(16),
                 borderRadius: 8,
                 backgroundColor: colorForCategories[label],
               }}
             />
-            <CashbackIcon size={16} name={label} />
+            <CashbackIcon size={vw(16)} name={label} />
             <Text style={styles.shopping__statistics_value}>
               {value.toFixed(1)}% ~ {((totalValue * value) / 100).toFixed(2)}₽
             </Text>
@@ -191,7 +195,7 @@ const Item = ({ item, navigation }) => {
           key={i.transaction.time + index}
         >
           <View style={styles.shopping__item_icon}>
-            <CashbackIcon size={16} name={i.transaction.category} />
+            <CashbackIcon size={vw(16)} name={i.transaction.category} />
           </View>
           <View style={{ flexGrow: 1 }}>
             <View style={styles.shopping__item_top}>
@@ -222,17 +226,57 @@ const Item = ({ item, navigation }) => {
   );
 };
 
+const ListItems = ({ data, diagram }) => {
+  const [category, setCategory] = useState(null);
+
+  return (
+    <>
+      <View style={[styles.shopping__statistics_wrapper, { marginTop: 8 }]}>
+        <View style={styles.shopping__catigories}>
+          {diagram.map(({ label }) => (
+            <Pressable
+              onPress={() => {
+                setCategory((prev) => (prev === label ? null : label));
+              }}
+              key={label}
+              style={[
+                styles.shopping__statistics_category,
+                { borderColor: category === label ? "black" : "#FAF9FD" },
+              ]}
+            >
+              <CashbackIcon size={vw(16)} name={label} />
+            </Pressable>
+          ))}
+        </View>
+        <Text style={styles.shopping__statistics_text}>Категории</Text>
+      </View>
+      <FlatList
+        style={styles.shopping}
+        showsVerticalScrollIndicator={false}
+        data={
+          category
+            ? data.reduce((arr, [date, second]) => {
+                const filter_by_category = second.filter(
+                  ({ transaction }) => transaction.category === category
+                );
+                if (filter_by_category.length)
+                  arr.push([date, filter_by_category]);
+                return arr;
+              }, [])
+            : data
+        }
+        renderItem={({ item }) => <Item item={item} navigation={navigation} />}
+        keyExtractor={(item) => item[0]}
+      />
+    </>
+  );
+};
+
 export default function Statistics({ navigation }) {
-  const { error_msg, transactions, k, statistics } = useSelector(
+  const { error_msg, transactions, statistics } = useSelector(
     ({ data }) => data
   );
   const dispatch = useDispatch();
-  const [category, setCategory] = useState(null);
-  const view_categories = useRef(null)
-
-  useEffect(() => {
-    console.log(view_categories.current)
-  }, [view_categories])
 
   useFocusEffect(
     useCallback(() => {
@@ -257,13 +301,23 @@ export default function Statistics({ navigation }) {
 
   const { data, totalBack, mostPopularCategories, diagram } = statistics;
 
+  if (!data.length)
+    return (
+      <ErrorElem
+        callback={() => {
+          navigation.goBack();
+        }}
+        error_msg="У вас еще не было транзакций"
+      />
+    );
+
   return (
     <ScreenWrapper>
       <View style={[styles.shopping__statistics_wrapper, { marginTop: 16 }]}>
         <PieChart
           data={diagram}
-          chartHeight="150"
-          chartWidth="150"
+          chartHeight={150}
+          chartWidth={150}
           totalValue={totalBack}
         />
       </View>
@@ -272,8 +326,8 @@ export default function Statistics({ navigation }) {
           <View style={styles.shopping__statistics_total}>
             <Svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width={vw(16)}
+              height={vw(16)}
               viewBox="0 0 16 16"
               fill="none"
             >
@@ -297,7 +351,7 @@ export default function Statistics({ navigation }) {
         </View>
         <View style={[styles.shopping__statistics_wrapper, { flexGrow: 1 }]}>
           <View style={styles.shopping__statistics_category}>
-            <CashbackIcon size={16} name={mostPopularCategories} />
+            <CashbackIcon size={vw(16)} name={mostPopularCategories} />
             <Text style={styles.shopping__statistics_value}>
               {mostPopularCategories}
             </Text>
@@ -307,49 +361,7 @@ export default function Statistics({ navigation }) {
           </Text>
         </View>
       </View>
-      <View
-        style={[
-          styles.shopping__statistics_wrapper,
-          { marginTop: 8 },
-        ]}
-        ref={view_categories}
-      >
-        <View style={styles.shopping__catigories}>
-          {diagram.map(({ label }) => (
-            <Pressable
-              onPress={() => {
-                setCategory((prev) => (prev === label ? null : label));
-              }}
-              key={label}
-              style={[
-                styles.shopping__statistics_category,
-                { borderColor: category === label ? "black" : "#FAF9FD" },
-              ]}
-            >
-              <CashbackIcon size={16} name={label} />
-            </Pressable>
-          ))}
-        </View>
-        <Text style={styles.shopping__statistics_text}>Категории</Text>
-      </View>
-      <FlatList
-        style={styles.shopping}
-        showsVerticalScrollIndicator={false}
-        data={
-          category
-            ? data.reduce((arr, [date, second]) => {
-                const filter_by_category = second.filter(
-                  ({ transaction }) => transaction.category === category
-                );
-                if (filter_by_category.length)
-                  arr.push([date, filter_by_category]);
-                return arr;
-              }, [])
-            : data
-        }
-        renderItem={({ item }) => <Item item={item} navigation={navigation} />}
-        keyExtractor={(item) => item[0]}
-      />
+      <ListItems data={data} diagram={diagram} />
       <BottomNav navigation={navigation} active_sreen="Statistics" />
     </ScreenWrapper>
   );
@@ -357,8 +369,8 @@ export default function Statistics({ navigation }) {
 
 const styles = StyleSheet.create({
   shopping: {
-    marginTop: 16,
-    marginBottom: 82,
+    marginTop: 8,
+    marginBottom: vw(32) + 32,
   },
 
   shopping__item: {
@@ -368,10 +380,7 @@ const styles = StyleSheet.create({
   },
 
   shopping__item_text: {
-    fontSize: 14,
-    lineHeight: 14,
-    fontWeight: "500",
-    color: "#44474F",
+    ...font(14, "500", "#44474F"),
   },
 
   shopping__item_wrapper: {
@@ -400,21 +409,15 @@ const styles = StyleSheet.create({
   },
 
   shopping__item_top_text: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#1B1B1F",
+    ...font(14, "500", "#1B1B1F"),
   },
 
   shopping__item_bottom_text: {
-    fontWeight: "400",
-    fontSize: 12,
-    color: "#44474F",
+    ...font(12, "400", "#44474F"),
   },
 
   shopping__item_back: {
-    color: "#201C00",
-    fontSize: 12,
-    fontWeight: "500",
+    ...font(12, "500", "#201C00"),
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderRadius: 20,
@@ -454,15 +457,11 @@ const styles = StyleSheet.create({
   },
 
   shopping__statistics_value: {
-    color: "#201C00",
-    fontSize: 12,
-    fontWeight: "500",
+    ...font(12, "500", "#201C00"),
   },
 
   shopping__statistics_text: {
-    fontSize: 12,
-    fontWeight: "400",
-    color: "#1B1B1F",
+    ...font(12, "400", "#1B1B1F"),
   },
 
   shopping__statistics_category: {
@@ -471,9 +470,7 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderStyle: "solid",
-    borderWidth: 2,
-    borderColor: "#FAF9FD",
+    ...border(2, "solid", "#FAF9FD"),
     backgroundColor: "#FAF9FD",
     borderRadius: 16,
     marginBottom: 8,
