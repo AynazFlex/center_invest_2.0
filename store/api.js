@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://86.110.175.202/api/v1",
+  baseURL: "http://51.250.97.147/api/v1",
 });
 
 const setHeaders = ({ token_type, access_token }) => ({
