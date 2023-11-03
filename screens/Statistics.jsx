@@ -75,7 +75,7 @@ const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
               style={{
                 height: vw(16),
                 width: vw(16),
-                borderRadius: 8,
+                borderRadius: vw(8),
                 backgroundColor: colorForCategories[label],
               }}
             />
@@ -226,7 +226,7 @@ const Item = ({ item, navigation }) => {
   );
 };
 
-const ListItems = ({ data, diagram }) => {
+const ListItems = ({ data, diagram, navigation }) => {
   const [category, setCategory] = useState(null);
 
   return (
@@ -361,7 +361,7 @@ export default function Statistics({ navigation }) {
           </Text>
         </View>
       </View>
-      <ListItems data={data} diagram={diagram} />
+      <ListItems data={data} diagram={diagram} navigation={navigation} />
       <BottomNav navigation={navigation} active_sreen="Statistics" />
     </ScreenWrapper>
   );
