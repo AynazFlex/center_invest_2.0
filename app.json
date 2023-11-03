@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "smart cash",
-    "slug": "smart cash",
+    "name": "app_2",
+    "slug": "app_2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.aynazflex.smart cash"
+      "package": "com.aynazflex.app_2"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,14 +31,6 @@
       "eas": {
         "projectId": "9171ed95-6886-4074-b519-be570597ef94"
       }
-    },
-    "plugins": [
-      [
-        "./plugins/withAndroidMainActivityAttributes",
-        {
-          "android:usesCleartextTraffic": true
-        }
-      ]
-    ]
+    }
   }
 }
