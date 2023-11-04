@@ -39,6 +39,12 @@
           "android:usesCleartextTraffic": true
         }
       ]
-    ]
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9171ed95-6886-4074-b519-be570597ef94"
+    }
   }
 }

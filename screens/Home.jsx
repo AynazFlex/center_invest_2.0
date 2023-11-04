@@ -98,7 +98,7 @@ export default function Home({ navigation }) {
         </View>
         <Text style={styles.title}>Авторизация</Text>
         <Text style={styles.subtitle}>
-          Войдите в приложение через аккаунт в Госуслугах
+          Войдите в приложение через аккаунт в Росуслугах
         </Text>
         <Pressable
           style={styles.button}
@@ -139,7 +139,7 @@ export default function Home({ navigation }) {
               </LinearGradient>
             </Defs>
           </Svg>
-          <Text style={styles.button__text}>Войти через Госуслуги</Text>
+          <Text style={styles.button__text}>Войти через Росуслуги</Text>
         </Pressable>
       </View>
     </ScreenWrapper>
