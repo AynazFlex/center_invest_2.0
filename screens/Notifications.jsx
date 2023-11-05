@@ -15,7 +15,7 @@ const Item = ({ item }) => {
         <Text style={styles.mess__body_time}>{item.time}</Text>
       </View>
       <View style={styles.mess__icon}>
-        <BankIcon color={"#EFEDF1"} />
+        <BankIcon color={"#EFEDF1"} isCenter={item.title === "Центр-инвест"} />
       </View>
     </View>
   );

@@ -40,24 +40,13 @@ export default function Transaction({ navigation, route }) {
         <Text style={styles.main__name}>{transaction.name}</Text>
         <Text style={styles.main__category}>{transaction.category}</Text>
         <View style={styles.main__total}>
-          <Text style={styles.main__value}>-{transaction.value}₽</Text>
+          <Text style={styles.main__value}>-{transaction.value} ₽</Text>
           <Text style={styles.main__back}>+{transaction.back}</Text>
         </View>
       </View>
       <Text style={styles.chak}>Счет списания</Text>
       <View style={styles.bank}>
-        {bank === "Центр-инвест" ? (
-          <BankIcon />
-        ) : (
-          <View
-            style={{
-              backgroundColor: "#FAF9FD",
-              width: vw(36),
-              height: vw(36),
-              borderRadius: 18,
-            }}
-          ></View>
-        )}
+        <BankIcon isCenter={bank === "Центр-инвест"} />
         <View>
           <Text style={styles.bank__name}>{bank}</Text>
           <Text style={styles.bank__number}>{account_number}</Text>

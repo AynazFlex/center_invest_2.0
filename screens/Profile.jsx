@@ -24,18 +24,7 @@ import border from "../assets/functions/border";
 const Item = ({ item, navigation }) => (
   <View style={styles.card__wrapper}>
     <View style={styles.card__header}>
-      {item.bank === "Центр-инвест" ? (
-        <BankIcon />
-      ) : (
-        <View
-          style={{
-            backgroundColor: "#FAF9FD",
-            width: vw(36),
-            height: vw(36),
-            borderRadius: vw(18),
-          }}
-        ></View>
-      )}
+      <BankIcon isCenter={item.bank === "Центр-инвест"} />
       <View>
         <Text style={styles.card__bank}>{item.bank}</Text>
         {!item.can_choose_cashback && !item.cashbacks.length && (
