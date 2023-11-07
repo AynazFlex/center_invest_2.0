@@ -204,9 +204,11 @@ const Item = ({ item, navigation }) => {
                   ? i.transaction.name.slice(0, 10) + "..."
                   : i.transaction.name}
               </Text>
-              <Text style={styles.shopping__item_back}>
-                +{i.transaction.back}
-              </Text>
+              <View style={styles.shopping__item_back}>
+                <Text style={styles.shopping__item_back_text}>
+                  +{i.transaction.back}
+                </Text>
+              </View>
               <Text
                 style={[styles.shopping__item_top_text, { marginLeft: "auto" }]}
               >
@@ -417,11 +419,14 @@ const styles = StyleSheet.create({
   },
 
   shopping__item_back: {
-    ...font(12, "500", "#201C00"),
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderRadius: 20,
     backgroundColor: "#FBE505",
+  },
+
+  shopping__item_back_text: {
+    ...font(12, "500", "#201C00"),
   },
 
   shopping__statistics_wrapper: {
