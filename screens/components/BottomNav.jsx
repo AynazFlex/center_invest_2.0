@@ -12,7 +12,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
 
   return (
     <View style={styles.wrapper}>
-      <View style={[styles.panel, { left: -16 }]} />
+      <View style={[styles.panel, { left: vw(-16) }]} />
       <Pressable
         onPress={() => handlePress("Profile")}
         style={[styles.link, { backgroundColor: activeLink("Profile") }]}
@@ -84,7 +84,7 @@ const BottomNav = ({ navigation, active_sreen }) => {
           <Text style={styles.notif_num_text}>{notifications.length}</Text>
         </View>
       </Pressable>
-      <View style={[styles.panel, { right: -16 }]} />
+      <View style={[styles.panel, { right: vw(-16) }]} />
     </View>
   );
 };
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   wrapper: {
     position: "absolute",
     bottom: 0,
-    left: 16,
+    left: vw(16),
     width: "100%",
     paddingHorizontal: 31,
     flexDirection: "row",
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEDF1",
   },
   panel: {
-    width: 16,
+    width: vw(16),
     height: vw(32) + 32,
     position: "absolute",
     top: 0,

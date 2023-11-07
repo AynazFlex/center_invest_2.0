@@ -81,7 +81,7 @@ const PieChart = ({ data, chartHeight, chartWidth, totalValue }) => {
             />
             <CashbackIcon size={vw(16)} name={label} />
             <Text style={styles.shopping__statistics_value}>
-              {value.toFixed(1)}% ~ {((totalValue * value) / 100).toFixed(2)}₽
+              {value.toFixed(1)}% ~ {((totalValue * value) / 100).toFixed(2)} ₽
             </Text>
           </View>
         ))}
@@ -318,8 +318,8 @@ export default function Statistics({ navigation }) {
       <View style={[styles.shopping__statistics_wrapper, { marginTop: 16 }]}>
         <PieChart
           data={diagram}
-          chartHeight={150}
-          chartWidth={150}
+          chartHeight={vw(120)}
+          chartWidth={vw(120)}
           totalValue={totalBack}
         />
       </View>
@@ -359,7 +359,7 @@ export default function Statistics({ navigation }) {
             </Text>
           </View>
           <Text style={styles.shopping__statistics_text}>
-            Самая популярная категория
+            Популярная категория
           </Text>
         </View>
       </View>
@@ -419,8 +419,8 @@ const styles = StyleSheet.create({
   },
 
   shopping__item_back: {
-    paddingVertical: 2,
-    paddingHorizontal: 6,
+    paddingVertical: vw(2),
+    paddingHorizontal: vw(6),
     borderRadius: 20,
     backgroundColor: "#FBE505",
   },
@@ -442,6 +442,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
     flexWrap: "wrap",
+    marginBottom: 8,
   },
 
   shopping__statistics: {

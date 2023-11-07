@@ -1,4 +1,5 @@
 import { View, StyleSheet, StatusBar } from "react-native";
+import vw from "../../assets/functions/vw";
 
 export default function ScreenWrapper({ children }) {
   return (
@@ -13,6 +14,6 @@ const _styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingHorizontal: 16,
+    paddingHorizontal: vw(16),
   },
 });

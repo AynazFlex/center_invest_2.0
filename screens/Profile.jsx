@@ -90,10 +90,8 @@ export default function Profile({ navigation }) {
     <ScreenWrapper>
       <View style={styles.header}>
         <Image
-          width={vw(48)}
-          height={vw(48)}
           style={styles.header__img}
-          source={require("../assets/image/user_icon.png")}
+          source={require("../assets/image/people.png")}
         />
         <View style={styles.header__info}>
           <Text style={styles.header__user_name}>Александр</Text>
@@ -120,6 +118,8 @@ const styles = StyleSheet.create({
   },
 
   header__img: {
+    width: vw(48),
+    height: vw(48),
     marginRight: 8,
   },
 

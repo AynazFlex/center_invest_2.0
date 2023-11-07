@@ -70,7 +70,6 @@ const BankIcon = ({ color, isCenter }) => (
         height={vw(24)}
         viewBox="0 0 24 24"
       >
-        <Rect width={vw(24)} height={vw(24)} fill="#95F7B9" />
         <Text
           x="12"
           y="17"
