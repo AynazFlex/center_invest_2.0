@@ -8,4 +8,6 @@
 2. Redux-toolkit
 3. axios
 
+### видео
+
 [![Сыылка на видео](https://img.youtube.com/vi/G8C4tv-vQnY/0.jpg)](https://www.youtube.com/watch?v=G8C4tv-vQnY)
