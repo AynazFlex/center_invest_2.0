@@ -14,6 +14,8 @@ import * as Font from "expo-font";
 import { useEffect } from "react";
 import { useState } from "react";
 import LoadElem from "./screens/components/LoadElem";
+import Chat from "./screens/Chat";
+import Limits from "./screens/Limits";
 
 const Stack = createNativeStackNavigator();
 
@@ -70,6 +72,16 @@ export default function App() {
             options={{ animation: "none" }}
             name="Transaction"
             component={Transaction}
+          />
+          <Stack.Screen
+            options={{ animation: "none" }}
+            name="Chat"
+            component={Chat}
+          />
+          <Stack.Screen
+            options={{ animation: "none" }}
+            name="Limits"
+            component={Limits}
           />
         </Stack.Navigator>
       </NavigationContainer>

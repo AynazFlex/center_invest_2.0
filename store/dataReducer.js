@@ -6,6 +6,9 @@ import {
   fetchGetTransactions,
   fetchLogout,
   fetchChooseCardCashBack,
+  fetchChat,
+  fetchLimits,
+  fetchLimit,
 } from "./api";
 
 export const convertMonth = {
@@ -167,6 +170,23 @@ export const getCard = createAsyncThunk(
   }
 );
 
+export const getChat = createAsyncThunk(
+  "data/chat",
+  async (promt, thunkAPI) => {
+    try {
+      const { access_token, token_type } = thunkAPI.getState().data;
+      const { data } = await fetchChat({
+        promt,
+        access_token,
+        token_type,
+      });
+      return data;
+    } catch ({ response }) {
+      return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
+    }
+  }
+);
+
 export const getTransactions = createAsyncThunk(
   "data/transactions",
   async (_, thunkAPI) => {
@@ -179,6 +199,41 @@ export const getTransactions = createAsyncThunk(
       );
       if (mount) return data;
       return thunkAPI.rejectWithValue("У вас еще не было транзакций");
+    } catch ({ response }) {
+      return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
+    }
+  }
+);
+
+export const getLimits = createAsyncThunk(
+  "data/limits",
+  async (_, thunkAPI) => {
+    try {
+      const { access_token, token_type } = thunkAPI.getState().data;
+      const { data } = await fetchLimits({ access_token, token_type });
+      return data;
+    } catch ({ response }) {
+      return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
+    }
+  }
+);
+
+export const setLimits = createAsyncThunk(
+  "data/setLimits",
+  async (limits, thunkAPI) => {
+    try {
+      const { access_token, token_type } = thunkAPI.getState().data;
+      const { value } = await Promise.allSettled(
+        limits.map(({ category, value }) =>
+          fetchLimit({
+            category,
+            value,
+            access_token,
+            token_type,
+          })
+        )
+      );
+      return value;
     } catch ({ response }) {
       return thunkAPI.rejectWithValue(response.data.detail || "Error :/");
     }
@@ -243,6 +298,19 @@ const initialState = {
       body: "Ваше обращение №15446 рассмотрено. Категория операции «Ремонт61» изменена с Аквариум на Автозапчасти",
       time: "01:56 06.10.2023",
     },
+  ],
+  chat: [],
+  limits: [
+    { category: "автозапчасти", value: "0" },
+    { category: "аквариум", value: "0" },
+    { category: "напитки", value: "0" },
+    { category: "уборка", value: "0" },
+    { category: "одежда", value: "0" },
+    { category: "закуски и приправы", value: "0" },
+    { category: "продукты питания", value: "0" },
+    { category: "видеоигры", value: "0" },
+    { category: "образование", value: "0" },
+    { category: "электроника", value: "0" },
   ],
 };
 
@@ -331,6 +399,23 @@ const dataSlice = createSlice({
     });
     builder.addCase(setNewCashbacks.pending, pending);
     builder.addCase(setNewCashbacks.rejected, rejected);
+    builder.addCase(getChat.fulfilled, (state, { payload }) => {
+      state.chat.push(payload);
+      state.isPending = false;
+    });
+    builder.addCase(getChat.pending, pending);
+    builder.addCase(getChat.rejected, rejected);
+    builder.addCase(getLimits.fulfilled, (state, { payload }) => {
+      state.limits = payload;
+      state.isPending = false;
+    });
+    builder.addCase(getLimits.pending, pending);
+    builder.addCase(getLimits.rejected, rejected);
+    builder.addCase(setLimits.fulfilled, (state) => {
+      state.isPending = false;
+    });
+    builder.addCase(setLimits.pending, pending);
+    builder.addCase(setLimits.rejected, rejected);
   },
 });
 

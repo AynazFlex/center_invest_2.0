@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://51.250.97.147/api/v1",
+  baseURL: "https://cashyoo.ru/api/v1",
 });
 
 const setHeaders = ({ token_type, access_token }) => ({
@@ -59,6 +59,30 @@ export const fetchChooseCardCashBack = async ({
   );
 };
 
+export const fetchLimit = async ({
+  category,
+  value,
+  access_token,
+  token_type,
+}) => {
+  return await instance.post(
+    "/set_limit/",
+    {
+      category,
+      value,
+    },
+    { ...setHeaders({ access_token, token_type }) }
+  );
+};
+
 export const fetchGetTransactions = getWrapper("/transactions/");
 
 export const fetchLogout = getWrapper("/log_out/");
+
+export const fetchLimits = getWrapper("/limits/");
+
+export const fetchChat = async ({ promt, access_token, token_type }) => {
+  return await instance.get(`/giga_chat/?promt=${promt}`, {
+    ...setHeaders({ access_token, token_type }),
+  });
+};

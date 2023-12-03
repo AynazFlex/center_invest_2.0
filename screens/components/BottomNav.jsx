@@ -1,5 +1,5 @@
 import { View, Pressable, StyleSheet, Text } from "react-native";
-import { Path, Svg } from "react-native-svg";
+import { Path, Svg, Rect, Line } from "react-native-svg";
 import { useSelector } from "react-redux";
 import vw from "../../assets/functions/vw";
 import font from "../../assets/functions/font";
@@ -84,6 +84,48 @@ const BottomNav = ({ navigation, active_sreen }) => {
           <Text style={styles.notif_num_text}>{notifications.length}</Text>
         </View>
       </Pressable>
+      <Pressable
+        onPress={() => handlePress("Chat")}
+        style={[styles.link, { backgroundColor: activeLink("Chat") }]}
+      >
+        <Svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <Path d="M19 2H5C3.34 2 2 3.34 2 5v13c0 1.66 1.34 3 3 3h2v4l4-4h10c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3z" />
+        </Svg>
+      </Pressable>
+      <Pressable
+        onPress={() => handlePress("Limits")}
+        style={[styles.link, { backgroundColor: activeLink("Limits") }]}
+      >
+        <Svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="red"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <Rect
+            fill="#002110"
+            x="3"
+            y="6"
+            width="18"
+            height="12"
+            rx="2"
+            ry="2"
+          />
+          <Line x1="9" y1="3" x2="9" y2="6" />
+          <Line x1="15" y1="3" x2="15" y2="6" />
+          <Line x1="5" y1="12" x2="19" y2="12" />
+        </Svg>
+      </Pressable>
       <View style={[styles.panel, { right: vw(-16) }]} />
     </View>
   );
@@ -113,7 +155,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: vw(64),
+    width: vw(42),
     height: vw(32),
     borderRadius: vw(16),
   },
