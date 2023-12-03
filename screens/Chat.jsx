@@ -79,12 +79,20 @@ export default function Chat({ navigation }) {
     <ScreenWrapper>
       <Items chat={chat} isPending={isPending} />
       <View style={styles.questions}>
-        <Pressable onPress={() => dispatch(getChat(1))} style={styles.question}>
+        <Pressable
+          disabled={isPending}
+          onPress={() => dispatch(getChat(1))}
+          style={styles.question}
+        >
           <Text style={styles.question_text}>
             Получить советы по финансам на текущий месяц
           </Text>
         </Pressable>
-        <Pressable onPress={() => dispatch(getChat(2))} style={styles.question}>
+        <Pressable
+          disabled={isPending}
+          onPress={() => dispatch(getChat(2))}
+          style={styles.question}
+        >
           <Text style={styles.question_text}>
             Получить аналитику трат за прошлый месяц
           </Text>

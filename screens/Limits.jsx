@@ -38,23 +38,29 @@ const LimitArr = [
 ];
 
 const limitArr = [
-  { category: "автозапчасти", value: 10000 },
-  { category: "аквариум", value: 2000 },
-  { category: "напитки", value: 200 },
-  { category: "уборка", value: 1200 },
-  { category: "одежда", value: 5000 },
-  { category: "закуски и приправы", value: 100 },
-  { category: "продукты питания", value: 5000 },
-  { category: "видеоигры", value: 6000 },
-  { category: "образование", value: 3000 },
-  { category: "электроника", value: 20000 },
+  { category: "автозапчасти", value: "" },
+  { category: "аквариум", value: "" },
+  { category: "напитки", value: "" },
+  { category: "уборка", value: "" },
+  { category: "одежда", value: "" },
+  { category: "закуски и приправы", value: "" },
+  { category: "продукты питания", value: "" },
+  { category: "видеоигры", value: "" },
+  { category: "образование", value: "" },
+  { category: "электроника", value: "" },
 ];
 
-const Item = ({ item, setLimitMap }) => {
+const Item = ({ item, setLimitMap, limits }) => {
+  const value = limits.find((limit) => limit.category === item.category)?.value;
   return (
     <View style={styles.limit}>
       <CashbackIcon size={vw(24)} name={item.category} />
       <Text style={styles.limit_category}>{item.category}</Text>
+      {!!value && (
+        <View style={styles.limit_wrapp}>
+          <Text style={styles.limit_wrapp_text}>{value}</Text>
+        </View>
+      )}
       <TextInput
         style={styles.limit_value}
         cursorColor={"black"}
@@ -66,6 +72,7 @@ const Item = ({ item, setLimitMap }) => {
           });
         }}
         value={item.value}
+        placeholder="..."
       />
     </View>
   );
@@ -74,7 +81,7 @@ const Item = ({ item, setLimitMap }) => {
 export default function Limits({ navigation }) {
   const { limits, error_msg, isPending } = useSelector(({ data }) => data);
   const dispatch = useDispatch();
-  const [limitMap, setLimitMap] = useState(limits);
+  const [limitMap, setLimitMap] = useState(limitArr);
 
   useFocusEffect(
     useCallback(() => {
@@ -103,13 +110,17 @@ export default function Limits({ navigation }) {
         style={styles.container}
         data={limitMap}
         renderItem={({ item }) => (
-          <Item item={item} setLimitMap={setLimitMap} />
+          <Item item={item} setLimitMap={setLimitMap} limits={limits} />
         )}
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, i) => i}
       />
       <Pressable
-        onPress={() => dispatch(setLimits(limitMap))}
+        onPress={() => {
+          dispatch(setLimits(limitMap.filter((elem) => elem.value)));
+          setLimitMap(limitArr);
+          dispatch(getLimits());
+        }}
         style={styles.done}
       >
         <Text style={styles.done_text}>Сохранить</Text>
@@ -155,5 +166,14 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     textAlign: "right",
     width: 100,
+  },
+  limit_wrapp: {
+    paddingVertical: vw(2),
+    paddingHorizontal: vw(6),
+    borderRadius: 20,
+    backgroundColor: "#FBE505",
+  },
+  limit_wrapp_text: {
+    ...font(18, "500", "#201C00"),
   },
 });
